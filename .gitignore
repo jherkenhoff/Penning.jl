@@ -1,0 +1,30 @@
+# Julia stuff
+*.jl.cov
+*.jl.*.cov
+*.jl.mem
+*.mem
+deps/deps.jl
+
+# Swap files.
+*.swp
+*~
+
+# Documenter.jl and MkDocs
+docs/build
+docs/site
+docs/src/generated
+
+# Benchmark output
+*.html
+*.json
+*.bson
+
+# Profiler output
+*.qdrep
+
+# Jupyter Lab stuff and notebooks
+*.ipynb
+.ipynb_checkpoints
+
+# VSCode
+.vscode
