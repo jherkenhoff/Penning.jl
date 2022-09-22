@@ -3,7 +3,7 @@ using LinearAlgebra
 using Penning.Constants
 using Penning.Particles
 
-using Polyester
+#using Polyester
 
 struct CoulombInteraction <: AbstractInteraction
 end
@@ -11,7 +11,8 @@ end
 function add_interaction_E_field!(interaction::CoulombInteraction, trap)
     # Woooow, THIS is ugly! TODO: Find more elegant solution
     for this_particle_collection in trap.particles
-        @batch for this_particle in 1:N_particles(this_particle_collection)
+        #@batch for this_particle in 1:N_particles(this_particle_collection)
+            for this_particle in 1:N_particles(this_particle_collection)
             r1 = this_particle_collection.r[this_particle]
             for other_particle_collection in trap.particles
                 for other_particle in 1:N_particles(other_particle_collection)
