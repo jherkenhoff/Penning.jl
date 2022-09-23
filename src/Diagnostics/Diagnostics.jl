@@ -1,11 +1,10 @@
 module Diagnostics
 
 
-export AbstractDiagnostic, ProgressDiagnostic, DashboardDiagnostic
+export AbstractDiagnostic, ProgressDiagnostic
 
 abstract type AbstractDiagnostic end
 
 include("progress.jl")
-include("dashboard.jl")
 
 end # module
