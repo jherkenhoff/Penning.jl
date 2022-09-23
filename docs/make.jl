@@ -6,10 +6,6 @@ using DocumenterCitations
 
 const OUTPUT_DIR   = joinpath(@__DIR__, "src/generated")
 
-example_pages = [
-    "Basic eigenmotion"                  => "generated/basic_eigenmotion.md",
- ]
-
 pages = [
     "Home" => "index.md",
     "Installation instructions" => "installation_instructions.md",
@@ -30,7 +26,6 @@ pages = [
         "Overview" => "output_writers/overview.md"
         "Writing to memory" => "output_writers/memory_writer.md"
     ],
-    "Examples" => example_pages,
     "Utils" => [
         "Schedules" => "utils/schedules.md"
     ],
