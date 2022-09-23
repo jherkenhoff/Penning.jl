@@ -30,7 +30,7 @@ setup = Setup(
 
 dt = 2*pi/omega_p/OVERSAMPLING
 sim = Simulation(setup, 
-    dt=dt, 
+    dt=dt,
     output_writers=(MemoryWriter(PositionComponentObservable(1, 1, 1, 3), IterationInterval(1)),),
     stop_time=2*pi/omega_z*N_AXIAL_CYCLES)
 
