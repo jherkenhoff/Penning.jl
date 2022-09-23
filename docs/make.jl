@@ -3,19 +3,8 @@ pushfirst!(LOAD_PATH, joinpath(@__DIR__, ".."))
 using Penning
 using Documenter
 using DocumenterCitations
-using Literate
 
-const EXAMPLES_DIR = joinpath(@__DIR__, "..", "examples")
 const OUTPUT_DIR   = joinpath(@__DIR__, "src/generated")
-
-examples = [
-    "basic_eigenmotion.jl"
-]
-
-for example in examples
-    example_filepath = joinpath(EXAMPLES_DIR, example)
-    Literate.markdown(example_filepath, OUTPUT_DIR; flavor = Literate.DocumenterFlavor())
-end
 
 example_pages = [
     "Basic eigenmotion"                  => "generated/basic_eigenmotion.md",

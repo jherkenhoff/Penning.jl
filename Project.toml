@@ -1,6 +1,6 @@
 name = "Penning"
 uuid = "0d70b53b-253d-4784-b4a0-96e42c2003f1"
-authors = ["Jost Herkenhoff <jost.herkenhoff@mpi-hd.mpg.de>"]
+authors = ["jherkenhoff <jherkenhoff@mailbox.org>"]
 version = "0.1.0"
 
 [deps]
