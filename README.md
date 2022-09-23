@@ -6,14 +6,13 @@
 <p align="center">
   <strong>~ Flexible and extensible Julia framework for simulating the motion of particles in Penning traps ~</strong>
   <br/>
-  <a href="https://github.com/jherkenhoff/Penning.jl"><strong>Explore the docs »</strong></a>
+  <a href="https://jherkenhoff.github.io/Penning.jl/"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <a href="https://github.com/jherkenhoff/Penning.jl/issues/new">Report Bug</a>
     ·
     <a href="https://github.com/jherkenhoff/Penning.jl/issues/new">Request Feature</a>
 </p>
-
 
 <img src="doc/header.png" width="100%">
 
@@ -101,7 +100,7 @@ run!(sim)
 
 Penning.jl provides the possibility to build arbitrary electronic circuits that can be "attached" to electrodes of a Penning trap.
 Two different techniques can be used to model the behaviour of the circuit:
-- You can use a block-oriented approach, in which you instantiate circuit components like resistors, capacitors etc. and specify their connections. Under the hood, [ModelingToolkit.jl](https://mtk.sciml.ai/dev/), an equation based modeling framework, converts this abstract representation into their underlying differential equations. This allows us to build complex circuits without having to do any hand calculations. Unfortunately, this comes at the price of significantly longer compilation times and a slightly slower simulation runtime. **Unfortunately, this type of circuit modelling is temporarily not available due to changes in the internal structure of Penning.**
+- You can use a block-oriented approach, in which you instantiate circuit components like resistors, capacitors etc. and specify their connections. Under the hood, [ModelingToolkit.jl](https://mtk.sciml.ai/dev/), an equation based modeling framework, converts this abstract representation into their underlying differential equations. This allows us to build complex circuits without having to do any hand calculations. Unfortunately, this comes at the price of significantly longer compilation times and a slightly slower simulation runtime. **Unfortunately, this type of circuit modelling is temporarily not available due to changes in the internal structure of Penning.jl.**
 - You can manually enter the differential equation of the circuit in [state space representation](https://en.wikipedia.org/wiki/State-space_representation) (SS). This technique requires more analytical hand-calculations prior to the simulation, but rewards you by being significantly faster. A collection of commonly used circuits are build in for convenience, so that you most certainly dont need to set up the differential equations yourselve (e.g. SSCircuitResistor or SSCircuitResonator).
 
 ## Development

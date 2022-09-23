@@ -8,7 +8,7 @@ const OUTPUT_DIR   = joinpath(@__DIR__, "src/generated")
 
 pages = [
     "Home" => "index.md",
-    "Installation instructions" => "installation_instructions.md",
+    "Installation" => "installation.md",
     "Simulation setup" => [
         "Overview" => "simulation_setup/overview.md",
         "Traps" => "simulation_setup/traps.md",
