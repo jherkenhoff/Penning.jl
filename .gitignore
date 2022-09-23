@@ -3,6 +3,7 @@
 *.jl.*.cov
 *.jl.mem
 *.mem
+Manifest.toml
 deps/deps.jl
 
 # Swap files.
