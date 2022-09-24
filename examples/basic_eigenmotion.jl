@@ -8,17 +8,15 @@ const U₀ = -50.0
 const c₂ = -14960.0
 const B₀ = 7.0
 
-Re_ions = ParticleCollection(Ion(187, 30), [[0, 0, 0.5]], [[1000, 0, 0]])
-
-omega_p = calc_omega_p(U₀, c₂, B₀, Re_ions.species.q, Re_ions.species.m)
-omega_z = calc_omega_z(U₀, c₂, B₀, Re_ions.species.q, Re_ions.species.m)
+ion = Ion(187, 30)
+omega_c, omega_p, omega_m, omega_z = calc_eigenfrequencies(U₀, c₂, B₀, ion.q, ion.m)
 
 trap = Trap(
     fields = (
         IdealTrapField(U₀, c₂, B₀),
     ),
     particles = (
-        Re_ions,
+        ParticleCollection(ion, [[0, 0, 0.5]], [[1000, 0, 0]]),
     )
 )
 

@@ -1,17 +1,59 @@
 using Penning
-
-using ModelingToolkit, DifferentialEquations
+using Plots
 
 const N_AXIAL_CYCLES = 60
 const OVERSAMPLING = 20
 
-species = Ion(187, 30)
-particle_distribution = SingleParticleDistribution([0, 0, 0.5], [0, 0, 0]) # No radial displacement or velocity. We only want to simulate axial motion
-particles = ParticleCollection(species, particle_distribution)
+const U₀ = -50.0
+const c₂ = -14960.0
+const B₀ = 7.0
 
-trap = IdealTrap(-50.0, -14960.0, 7.0)
-trap.particles[:particles] = particles
-trap.electrodes[:axial] = AxialParallelPlateElectrode(5e-3)
+const R = 10e6
+
+ion = Ion(187, 30)
+omega_c, omega_p, omega_m, omega_z = calc_eigenfrequencies(U₀, c₂, B₀, ion.q, ion.m)
+
+trap = Trap(
+    fields = (
+        IdealTrapField(U₀, c₂, B₀),
+    ),
+    particles = (
+        ParticleCollection(ion, [[0, 0, 0.5]], [[0, 0, 0]]),
+    ),
+    electrodes = (
+        AxialParallelPlateElectrode(5e-3),
+    )
+)
+
+setup = Setup(
+    traps = (
+        trap,
+    ),
+    circuit = SSCircuitResistor(R, T=4.2)
+)
+
+sim = Simulation(
+    setup, 
+    dt=2*pi/omega_p/OVERSAMPLING,
+    output_writers=(
+        MemoryWriter(PositionComponentObservable(1, 1, 1, 3), IterationInterval(1)),
+    )
+)
+
+run!(sim, run_until_time=2*pi/omega_z*N_AXIAL_CYCLES)
+
+z = sim.output_writers[1].mem
+t = sim.output_writers[1].t
+
+plot(t, z)
+
+
+
+
+
+
+
+
 
 R = 10000e6
 @named resistor = Resistor(R=R)
