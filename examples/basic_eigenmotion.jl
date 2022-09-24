@@ -4,9 +4,9 @@ using Plots
 const N_AXIAL_CYCLES = 10
 const OVERSAMPLING = 20
 
-U₀ = -50.0
-c₂ = -14960.0
-B₀ = 7.0
+const U₀ = -50.0
+const c₂ = -14960.0
+const B₀ = 7.0
 
 Re_ions = ParticleCollection(Ion(187, 30), [[0, 0, 0.5]], [[1000, 0, 0]])
 
@@ -37,7 +37,7 @@ sim = Simulation(
     )
 )
 
-run!(sim, run_for_time=2*pi/omega_z*N_AXIAL_CYCLES)
+run!(sim, run_until_time=2*pi/omega_z*N_AXIAL_CYCLES)
 
 z = sim.output_writers[1].mem
 t = sim.output_writers[1].t

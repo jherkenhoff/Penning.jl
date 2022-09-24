@@ -1,36 +1,54 @@
 using Penning
+using Plots
 
-const OVERSAMPLING = 20
-const N_AXIAL_CYCLES = 30
+const OVERSAMPLING = 200
+const N_AXIAL_CYCLES = 50
 
-const A_rf = 1000000
+const A_rf = 100000
 
-species = Electron()
-trap = IdealTrap(5.0, -14960.0, 7.0)
-trap.particles[:electrons] = ParticleCollection(species, SingleParticleDistribution([0,0,0], [10000,0,0]))
-trap.excitations[:quadrupolar] = QuadrupolarExcitation(calc_omega_p(trap, species) - calc_omega_z(trap, species), A_rf)
+const U₀ = -50.0
+const c₂ = -15000.0
+const B₀ = 1.0
 
-setup = Setup()
-setup.traps[:electron_trap] = trap
+ion = Ion(187, 30)
 
-sim = Simulation(setup, dt=2*pi/calc_omega_c(trap, species)/OVERSAMPLING, stop_time=N_AXIAL_CYCLES*2*pi/calc_omega_z(trap, species))
+omega_c, omega_p, omega_m, omega_z = calc_eigenfrequencies(U₀, c₂, B₀, ion.q, ion.m)
 
-sim.diagnostics[:progress] = ProgressDiagnostic()
-sim.output_writers[:position_z] = MemoryWriter(PositionComponentObservable(:electron_trap, :electrons, 1, 3), IterationInterval(600))
+trap = Trap(
+    fields = (
+        IdealTrapField(U₀, c₂, B₀), 
+        QuadrupolarExcitationField(omega_p - omega_z, A_rf)
+    ),
+    particles = (
+        ParticleCollection(ion, [[0, 0, 40e-6]], [[0, 0, 0]]),
+    )
+)
 
-run!(sim)
+setup = Setup(
+    traps = (trap, )
+)
 
+sim = Simulation(
+    setup,
+    dt=2*pi/omega_p/OVERSAMPLING,
+    output_writers=(
+        x = MemoryWriter(PositionComponentObservable(1, 1, 1, 1), IterationInterval(10)),
+        z = MemoryWriter(PositionComponentObservable(1, 1, 1, 3), IterationInterval(10)),
+    )
+)
+
+run!(sim, run_until_time=2*pi/omega_z*N_AXIAL_CYCLES)
 
 # Theoretical Rabi frequency: (http://hdl.handle.net/21.11116/0000-0005-6361-E)(Page 25, equation 2.46)
-Omega_R = A_rf/4*abs(species.q) / species.m /sqrt(calc_omega_z(trap, species)*(calc_omega_p(trap, species)-calc_omega_m(trap, species)))
-T_exchange = 2*pi/Omega_R/2
+Omega_R = A_rf/4*abs(ion.q) / ion.m /sqrt(omega_z*(omega_p-omega_m))
+T_exchange = 2*pi/Omega_R/4
 println("Theoretical exchange period: $T_exchange s")
 
-using Plots
-t = sim.output_writers[:position_z].t
-z = sim.output_writers[:position_z].mem
-plot(t*1e6, z, labels="Simulated Z position")
+t = sim.output_writers.z.t
+z = sim.output_writers.z.mem
+plot(t*1e6, z*1e6, labels="Simulated Z position")
 vline!([T_exchange*1e6], labels="Theoretical pi pulse duration", plot_title="Sideband coupling")
 xlabel!("Time / µs")
+ylabel!("Axial amplitude / µm")
 
 savefig(joinpath(@__DIR__, "quadrupolar.png"))

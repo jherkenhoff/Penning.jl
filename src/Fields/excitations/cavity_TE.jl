@@ -20,7 +20,7 @@ function TECavityExcitation(m::Integer, n::Integer, p::Integer, z_0::Number, rho
     return TECavityExcitation(m, n, p, z_0, rho_0, E_0, omega, zero)
 end
 
-function calc_excitation_E_field(exc::TECavityExcitation, r::AbstractVector{<:Number}, t::Number)
+function calc_E_field(exc::TECavityExcitation, r::AbstractVector{<:Number}, t::Number)
     rho, phi, z = cartesian2cylindrical(r)
     rho_hat, phi_hat, z_hat = cylindrical_unit_vectors(phi)
 
@@ -29,7 +29,7 @@ function calc_excitation_E_field(exc::TECavityExcitation, r::AbstractVector{<:Nu
         phi_hat * exc.besseljp_zero / exc.rho_0 * besseljp(exc.m, exc.besseljp_zero * rho/exc.rho_0) * sin(exc.omega * t + exc.m*phi)))
 end
 
-function set_excitation_E_field!(exc::TECavityExcitation, E::AbstractVector{<:Number}, r::AbstractVector{<:Number}, t::Float64)
+function set_E_field!(exc::TECavityExcitation, E::AbstractVector{<:Number}, r::AbstractVector{<:Number}, t::Float64)
     rho, phi, z = cartesian2cylindrical(r)
     rho_hat, phi_hat, z_hat = cylindrical_unit_vectors(phi)
     
@@ -39,7 +39,7 @@ function set_excitation_E_field!(exc::TECavityExcitation, E::AbstractVector{<:Nu
     nothing
 end
 
-function add_excitation_E_field!(exc::TECavityExcitation, E::AbstractVector{<:Number}, r::AbstractVector{<:Number}, t::Float64)
+function add_E_field!(exc::TECavityExcitation, E::AbstractVector{<:Number}, r::AbstractVector{<:Number}, t::Float64)
     rho, phi, z = cartesian2cylindrical(r)
     rho_hat, phi_hat, z_hat = cylindrical_unit_vectors(phi)
     
@@ -49,7 +49,7 @@ function add_excitation_E_field!(exc::TECavityExcitation, E::AbstractVector{<:Nu
     nothing
 end
 
-function calc_excitation_B_field(exc::TECavityExcitation, r::AbstractVector{<:Number}, t::Number)
+function calc_B_field(exc::TECavityExcitation, r::AbstractVector{<:Number}, t::Number)
     rho, phi, z = cartesian2cylindrical(r)
     rho_hat, phi_hat, z_hat = cylindrical_unit_vectors(phi)
 
@@ -59,7 +59,7 @@ function calc_excitation_B_field(exc::TECavityExcitation, r::AbstractVector{<:Nu
         phi_hat * safe_divide(exc.m, rho) * besselj(exc.m, exc.besseljp_zero * rho/exc.rho_0) * sin(exc.omega * t + exc.m*phi))))
 end
 
-function set_excitation_B_field!(exc::TECavityExcitation, B::AbstractVector{<:Number}, r::AbstractVector{<:Number}, t::Float64)
+function set_B_field!(exc::TECavityExcitation, B::AbstractVector{<:Number}, r::AbstractVector{<:Number}, t::Float64)
     rho, phi, z = cartesian2cylindrical(r)
     rho_hat, phi_hat, z_hat = cylindrical_unit_vectors(phi)
 
@@ -69,7 +69,7 @@ function set_excitation_B_field!(exc::TECavityExcitation, B::AbstractVector{<:Nu
         phi_hat * safe_divide(exc.m, rho) * besselj(exc.m, exc.besseljp_zero * rho/exc.rho_0) * sin(exc.omega * t + exc.m*phi)))
 end
 
-function add_excitation_B_field!(exc::TECavityExcitation, B::AbstractVector{<:Number}, r::AbstractVector{<:Number}, t::Float64)
+function add_B_field!(exc::TECavityExcitation, B::AbstractVector{<:Number}, r::AbstractVector{<:Number}, t::Float64)
     rho, phi, z = cartesian2cylindrical(r)
     rho_hat, phi_hat, z_hat = cylindrical_unit_vectors(phi)
 

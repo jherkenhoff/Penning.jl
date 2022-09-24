@@ -16,6 +16,7 @@ mutable struct Simulation{D, OW, CB}
     output_writers :: OW
     callbacks :: CB
     initialized :: Bool
+    wall_time :: Float64
 end
 
 function Simulation(setup::Setup;
@@ -34,7 +35,8 @@ function Simulation(setup::Setup;
         diagnostics,
         output_writers,
         callbacks,
-        false)
+        false,
+        0.0)
 end
 
 

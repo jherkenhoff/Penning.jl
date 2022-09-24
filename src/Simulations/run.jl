@@ -12,13 +12,16 @@ function run!(sim::Simulation; pickup::Bool=false,
               run_until_iteration = Inf,
               run_for_time = Inf,
               run_for_iterations = Inf,
-              wall_time_limit = Inf)
+              run_for_wall_time = Inf,
+              run_until_wall_time = Inf)
 
     sim.initialized = false
 
     @info "Starting simulation at iteration $(Int(sim.setup.clock.iteration)) and time $(prettytime(sim.setup.clock.time))"
 
-    if run_until_time == Inf && run_until_iteration == Inf && run_for_time == Inf && run_for_iterations == Inf && wall_time_limit == Inf
+    if run_until_time == Inf && run_until_iteration == Inf && 
+       run_for_time == Inf && run_for_iterations == Inf && 
+       run_for_wall_time == Inf && run_until_wall_time == Inf
         @warn "This simulation will run forever as no time, iteration or wall time limit was specified"
     end
 
@@ -26,8 +29,10 @@ function run!(sim::Simulation; pickup::Bool=false,
     start_time = sim.setup.clock.time
 
     start_wall_time = time_ns()
-
+    last_step_wall_time = start_wall_time
     while true
+        step_start_wall_time = last_step_wall_time
+
         time_step!(sim)
 
         if sim.setup.clock.iteration >= run_until_iteration
@@ -54,10 +59,16 @@ function run!(sim::Simulation; pickup::Bool=false,
             break
         end
 
-        wall_time = 1e-9*(time_ns() - start_wall_time)
-        if wall_time >= wall_time_limit
-            @info "Simulation is stopping. Simulation run time $(wall_time) " *
-                "has hit or exceeded simulation wall time limit $(prettytime(wall_time_limit))."
+        last_step_wall_time = time_ns()
+        sim.wall_time += 1e-9*(last_step_wall_time - step_start_wall_time)
+        if sim.wall_time >= run_until_wall_time
+            @info "Simulation is stopping. Simulation run time $(sim.wall_time) " *
+                "has hit or exceeded simulation total wall time limit $(prettytime(run_until_wall_time))."
+            break
+        end
+
+        if sim.wall_time - start_wall_time >= run_for_wall_time
+            @info "Simulation is stopping. Simulation did run for at least $(run_for_wall_time)."
             break
         end
     end
@@ -109,7 +120,6 @@ function initialize_simulation!(sim::Simulation)
     start_time = time_ns()
 
     setup = sim.setup
-    clock = setup.clock
 
     for writer in sim.output_writers
         init_output_writer!(writer, sim.setup)

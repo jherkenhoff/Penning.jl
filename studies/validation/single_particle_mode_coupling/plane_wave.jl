@@ -1,29 +1,50 @@
 using Penning
-
-const OVERSAMPLING = 20
-const N_AXIAL_CYCLES = 30
-const E_0 = 300
-
-species = Electron()
-
-trap = IdealTrap(5.0, -14960.0, 7.0)
-trap.particles[:electrons] = ParticleCollection(species, SingleParticleDistribution([0,0,0], [10000,0,0]))
-trap.excitations[:plane_wave] = PlaneWaveExcitation(calc_omega_p(trap, species) - calc_omega_z(trap, species), E_0)
-
-setup = Setup()
-setup.traps[:electron_trap] = trap
-
-sim = Simulation(setup, dt=2*pi/calc_omega_c(trap, species)/OVERSAMPLING, stop_time=N_AXIAL_CYCLES*2*pi/calc_omega_z(trap, species))
-
-sim.diagnostics[:progress] = ProgressDiagnostic()
-
-sim.output_writers[:memory_position] = MemoryWriter(PositionComponentObservable(:electron_trap, :electrons, 1, 3), IterationInterval(600))
-
-run!(sim)
-
 using Plots
-t = sim.output_writers[:memory_position].t
-z = sim.output_writers[:memory_position].mem
-plot(t, z, labels="Simulated Z position", plot_title="Plane Wave")
 
-savefig(joinpath(@__DIR__, "plane_wave.png"))
+const OVERSAMPLING = 200
+const N_AXIAL_CYCLES = 50
+
+const U₀ = -50.0
+const c₂ = -15000.0
+const B₀ = 1.0
+
+const E₀ = 10000.0
+
+ion = Ion(187, 30)
+
+omega_c, omega_p, omega_m, omega_z = calc_eigenfrequencies(U₀, c₂, B₀, ion.q, ion.m)
+
+trap = Trap(
+    fields = (
+        IdealTrapField(U₀, c₂, B₀),
+        PlaneWaveExcitationField(omega_p - omega_z - 1e3, E₀)
+    ),
+    particles = (
+        ParticleCollection(ion, [[0, 0, 0]], [[0, 0, 0]]),
+    )
+)
+
+setup = Setup(
+    traps = (trap, )
+)
+
+sim = Simulation(
+    setup,
+    dt=2*pi/omega_p/OVERSAMPLING,
+    output_writers=(
+        x = MemoryWriter(PositionComponentObservable(1, 1, 1, 1), IterationInterval(1)),
+        z = MemoryWriter(PositionComponentObservable(1, 1, 1, 3), IterationInterval(10)),
+    )
+)
+
+run!(sim, run_until_time=2*pi/omega_z*N_AXIAL_CYCLES)
+
+t = sim.output_writers.z.t
+z = sim.output_writers.z.mem
+#t = sim.output_writers.x.t
+#x = sim.output_writers.x.mem
+plot(t*1e6, z*1e6, labels="Simulated Z position")
+xlabel!("Time / µs")
+ylabel!("Axial amplitude / µm")
+
+#savefig(joinpath(@__DIR__, "plane_wave.png"))
