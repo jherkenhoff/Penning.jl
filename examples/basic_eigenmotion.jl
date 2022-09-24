@@ -29,12 +29,15 @@ setup = Setup(
 )
 
 dt = 2*pi/omega_p/OVERSAMPLING
-sim = Simulation(setup, 
+sim = Simulation(
+    setup, 
     dt=dt,
-    output_writers=(MemoryWriter(PositionComponentObservable(1, 1, 1, 3), IterationInterval(1)),),
-    stop_time=2*pi/omega_z*N_AXIAL_CYCLES)
+    output_writers=(
+        MemoryWriter(PositionComponentObservable(1, 1, 1, 3), IterationInterval(1)),
+    )
+)
 
-run!(sim)
+run!(sim, run_for_time=2*pi/omega_z*N_AXIAL_CYCLES)
 
 z = sim.output_writers[1].mem
 t = sim.output_writers[1].t
