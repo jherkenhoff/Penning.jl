@@ -1,5 +1,5 @@
 <h1 align="center">
-  💫Penning.jl
+  Penning.jl
 </h1>
 
 <!-- description -->
