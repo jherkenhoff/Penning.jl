@@ -30,8 +30,7 @@ pages = [
         "Traps" => "simulation_setup/traps.md",
         "Particles" => "simulation_setup/particles.md",
         "Particle interactions" => "simulation_setup/interactions.md",
-        "Excitations" => "simulation_setup/excitations.md",
-        "Circuit cosimulation" => "simulation_setup/circuit.md"
+        "Excitations" => "simulation_setup/excitations.md"
     ],
     "Running the simulation" => [
         "Overview" => "simulation/overview.md",
@@ -41,6 +40,10 @@ pages = [
     "Output writers" => [
         "Overview" => "output_writers/overview.md"
         "Writing to memory" => "output_writers/memory_writer.md"
+    ],
+    "Circuit cosimulation" => [
+        "Overview" => "circuit_cosimulation/overview.md",
+        "Theory" => "circuit_cosimulation/theory.md"
     ],
     "Utils" => [
         "Schedules" => "utils/schedules.md"

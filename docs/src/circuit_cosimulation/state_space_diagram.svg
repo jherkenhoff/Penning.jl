@@ -5,7 +5,7 @@
    viewBox="0 0 800 338.98316"
    version="1.1"
    id="svg2069"
-   sodipodi:docname="state_space_representation.svg"
+   sodipodi:docname="state_space_diagram.svg"
    inkscape:version="1.2.1 (9c6d41e410, 2022-07-14, custom)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -22,11 +22,11 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      showgrid="false"
-     inkscape:zoom="1.3333158"
-     inkscape:cx="263.62848"
-     inkscape:cy="97.501286"
-     inkscape:window-width="1680"
-     inkscape:window-height="1013"
+     inkscape:zoom="3.9934808"
+     inkscape:cx="173.53282"
+     inkscape:cy="107.17467"
+     inkscape:window-width="1366"
+     inkscape:window-height="703"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -135,12 +135,12 @@
      x="18.528791"
      y="193.38835"
      class="signal_text"
-     id="text2002">u</text>
+     id="text2002">i</text>
   <text
      x="773.52881"
      y="193.38835"
      class="signal_text"
-     id="text2004">y</text>
+     id="text2004">u</text>
   <g
      transform="translate(423.52879,188.38835)"
      id="g2009">
@@ -285,9 +285,9 @@
        y="40"
        class="block_text"
        id="text2049-6"
-       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:30px;font-family:serif;-inkscape-font-specification:'serif, Italic';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;fill:#000000">n<tspan
+       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:30px;font-family:serif;-inkscape-font-specification:'serif, Italic';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;fill:#000000">u<tspan
    style="font-size:65%;baseline-shift:sub"
-   id="tspan5032">y</tspan></text>
+   id="tspan567">n</tspan></text>
   </g>
   <g
      transform="translate(688.52879,188.38835)"
@@ -323,9 +323,9 @@
        y="40"
        class="block_text"
        id="text2049-6-2"
-       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:30px;font-family:serif;-inkscape-font-specification:'serif, Italic';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;fill:#000000">n<tspan
+       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:30px;font-family:serif;-inkscape-font-specification:'serif, Italic';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;fill:#000000">x<tspan
    style="font-size:65%;baseline-shift:sub"
-   id="tspan5902">x</tspan></text>
+   id="tspan569">n</tspan></text>
   </g>
   <g
      transform="translate(288.52879,188.38835)"
