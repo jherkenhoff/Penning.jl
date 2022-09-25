@@ -18,6 +18,7 @@ export
     Callback,
     CircuitMemoryWriter,
     CoulombInteraction,
+    Connection,
     DashboardDiagnostic,
     DipolarExcitationField,
     ElectrodeVoltageObservable,

@@ -92,7 +92,7 @@ function time_step!(sim::Simulation)
     else # business as usual...
         update_trap_fields!(sim.setup)
         add_interaction_fields!(sim.setup)
-        if sim.setup.circuit != nothing
+        if !isempty(sim.setup.circuits)
             handle_external_circuit!(sim.setup, sim.dt)
         end
         push_particles!(sim.particle_pusher, sim.setup, sim.dt)
@@ -167,28 +167,36 @@ end
 
 function handle_external_circuit!(setup::Setup, dt::Float64)
     # Collect induced currents on electrodes
-    i = 0.0
     for trap in setup.traps
         for electrode in trap.electrodes
             electrode.i = 0.0
             for p in values(trap.particles)
                 electrode.i += sum(calc_electrode_induced_current.((electrode,), p.r, p.v, (p.species.q,)))
             end
-            i += electrode.i
         end
     end
 
-    # Time step circuit
-    step_circuit!(setup.circuit, i, dt)
+    for circuit in setup.circuits
+        circuit.i .= 0.0 
+    end
 
-    # Read the voltages on the electrodes from circuit simulation
-    u = get_circuit_output_voltage(setup.circuit, i)
-    
+    for connection in setup.connections
+        i = setup.traps[connection.trap].electrodes[connection.electrode].i
+        setup.circuits[connection.circuit].i[connection.circuit_pin] += i
+    end
+
+    # Time step circuits
+    for circuit in setup.circuits
+        step_circuit!(circuit, dt)
+    end
+
+    for connection in setup.connections
+        u = setup.circuits[connection.circuit].u[connection.circuit_pin]
+        setup.traps[connection.trap].electrodes[connection.electrode].u = u
+    end
 
     for trap in setup.traps
         for electrode in trap.electrodes
-            electrode.u = u
-
             for particle_collection in trap.particles
                 particle_collection.E .+= calc_electrode_backaction_field.( (electrode,), particle_collection.r)
             end

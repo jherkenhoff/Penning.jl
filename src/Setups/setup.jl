@@ -4,21 +4,19 @@ using Penning.Circuits
 
 import Penning
 
-mutable struct Setup{T}
+struct Setup{T, CIR, CON}
     traps :: T
-    circuit :: Union{AbstractCircuit, Nothing}
+    circuits :: CIR
+    connections :: CON
     clock :: Clock
 end
 
-function Setup(; traps, circuit=nothing)
+function Setup(; traps, circuits=(;), connections=(;))
     clock = Clock()
-    return Setup(traps, circuit, clock)
+    # TODO: Check that an electrode is only connected to at most one circuit
+    return Setup(traps, circuits, connections, clock)
 end
 
-function Setup(circuit::AbstractCircuit; traps)
-    clock = Clock()
-    return Setup(traps, circuit, clock)
-end
 
 function Penning.reset!(setup::Setup)
     reset!(setup.clock)
