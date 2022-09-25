@@ -3,9 +3,9 @@ struct Connection{T, E, C}
     trap :: T
     electrode :: E
     circuit :: C
-    circuit_pin :: Integer
+    pin :: Integer
 end
 
-function Connection(; trap, electrode, circuit, circuit_pin)
-    return Connection(trap, electrode, circuit, circuit_pin)
+function Connection(; trap, electrode, circuit, pin)
+    return Connection(trap, electrode, circuit, pin)
 end

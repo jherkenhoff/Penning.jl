@@ -1,6 +1,6 @@
 using StaticArrays
 
-struct QuadrupolarExcitationField <: AbstractField
+mutable struct QuadrupolarExcitationField <: AbstractField
     omega :: Float64
     A :: Float64
 end

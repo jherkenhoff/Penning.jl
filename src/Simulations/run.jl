@@ -15,8 +15,6 @@ function run!(sim::Simulation; pickup::Bool=false,
               run_for_wall_time = Inf,
               run_until_wall_time = Inf)
 
-    sim.initialized = false
-
     @info "Starting simulation at iteration $(Int(sim.setup.clock.iteration)) and time $(prettytime(sim.setup.clock.time))"
 
     if run_until_time == Inf && run_until_iteration == Inf && 
@@ -81,14 +79,13 @@ end
 function time_step!(sim::Simulation)
 
     if !(sim.initialized) # execute initialization step
-        initialize_simulation!(sim)
-
         @debug "Executing initial time step..."
         start_time = time_ns()
         update_trap_fields!(sim.setup)
         initial_particle_push!(sim.particle_pusher, sim.setup, sim.dt)
         elapsed_initial_step_time = prettytime(1e-9 * (time_ns() - start_time))
         @debug "    ... initial time step complete ($elapsed_initial_step_time)."
+        sim.initialized = true
     else # business as usual...
         update_trap_fields!(sim.setup)
         add_interaction_fields!(sim.setup)
@@ -100,13 +97,13 @@ function time_step!(sim::Simulation)
 
     # Callbacks, diagnostics and writers
 
-    for diag in sim.diagnostics
+    for diag in values(sim.diagnostics)
         diag.schedule(sim.setup) && diag(sim.setup)
     end
-    for writer in sim.output_writers
+    for writer in values(sim.output_writers)
         writer.schedule(sim.setup) && writer(sim.setup)
     end
-    for callback in sim.callbacks
+    for callback in values(sim.callbacks)
         callback.schedule(sim.setup) && callback(sim)
     end
 
@@ -115,35 +112,17 @@ function time_step!(sim::Simulation)
     return nothing
 end
 
-function initialize_simulation!(sim::Simulation)
-    @debug "Initializing simulation..."
-    start_time = time_ns()
-
-    setup = sim.setup
-
-    for writer in sim.output_writers
-        init_output_writer!(writer, sim.setup)
-    end
-
-    sim.initialized = true
-
-    initialization_time = prettytime(1e-9 * (time_ns() - start_time))
-    @debug "    ... simulation initialization complete ($initialization_time)"
-
-    return nothing
-end
-
 @inline function update_trap_fields!(setup::Setup)
-    for trap in setup.traps
+    for trap in values(setup.traps)
         update_trap_fields!(trap, setup.clock.time)
     end
     nothing
 end
 
 function update_trap_fields!(trap::Trap, t::Number)
-    for particle_collection in trap.particles
+    for particle_collection in values(trap.particles)
         for i in 1:N_particles(particle_collection)
-            for (i_f, field) in enumerate(trap.fields)
+            for (i_f, field) in enumerate(values(trap.fields))
                 if i_f == 1
                     set_E_field!(field, particle_collection.E[i], particle_collection.r[i], t)
                     set_B_field!(field, particle_collection.B[i], particle_collection.r[i], t)
@@ -158,8 +137,8 @@ function update_trap_fields!(trap::Trap, t::Number)
 end
 
 function add_interaction_fields!(setup::Setup)
-    for trap in setup.traps
-        for interaction in trap.interactions
+    for trap in values(setup.traps)
+        for interaction in values(trap.interactions)
             add_interaction_E_field!(interaction, trap)
         end
     end
@@ -167,8 +146,8 @@ end
 
 function handle_external_circuit!(setup::Setup, dt::Float64)
     # Collect induced currents on electrodes
-    for trap in setup.traps
-        for electrode in trap.electrodes
+    for trap in values(setup.traps)
+        for electrode in values(trap.electrodes)
             electrode.i = 0.0
             for p in values(trap.particles)
                 electrode.i += sum(calc_electrode_induced_current.((electrode,), p.r, p.v, (p.species.q,)))
@@ -176,26 +155,26 @@ function handle_external_circuit!(setup::Setup, dt::Float64)
         end
     end
 
-    for circuit in setup.circuits
+    for circuit in values(setup.circuits)
         circuit.i .= 0.0 
     end
 
-    for connection in setup.connections
+    for connection in values(setup.connections)
         i = setup.traps[connection.trap].electrodes[connection.electrode].i
-        setup.circuits[connection.circuit].i[connection.circuit_pin] += i
+        setup.circuits[connection.circuit].i[connection.pin] += i
     end
 
     # Time step circuits
-    for circuit in setup.circuits
+    for circuit in values(setup.circuits)
         step_circuit!(circuit, dt)
     end
 
-    for connection in setup.connections
-        u = setup.circuits[connection.circuit].u[connection.circuit_pin]
+    for connection in values(setup.connections)
+        u = setup.circuits[connection.circuit].u[connection.pin]
         setup.traps[connection.trap].electrodes[connection.electrode].u = u
     end
 
-    for trap in setup.traps
+    for trap in values(setup.traps)
         for electrode in trap.electrodes
             for particle_collection in trap.particles
                 particle_collection.E .+= calc_electrode_backaction_field.( (electrode,), particle_collection.r)

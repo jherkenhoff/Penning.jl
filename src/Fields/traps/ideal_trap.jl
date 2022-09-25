@@ -3,7 +3,7 @@ using Penning.Particles
 using LinearAlgebra: norm
 using StaticArrays
 
-struct IdealTrapField <: AbstractField
+mutable struct IdealTrapField <: AbstractField
     U₀ :: Float64
     c₂ :: Float64
     B₀ :: Float64

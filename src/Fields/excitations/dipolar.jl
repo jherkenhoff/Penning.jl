@@ -1,10 +1,10 @@
-struct DipolarExcitationField <: AbstractField
+mutable struct DipolarExcitationField <: AbstractField
     omega :: Float64
-    A :: SVector{3, Float64}
+    A :: MVector{3, Float64}
 end
 
 function DipolarExcitationField(omega::Number, A::AbstractVector{<:Number})
-    return DipolarExcitationField(omega, SVector{3, Float64}(A))
+    return DipolarExcitationField(omega, MVector{3, Float64}(A))
 end
 
 function calc_E_field(exc::DipolarExcitationField, r::AbstractVector{<:Number}, t::Number)

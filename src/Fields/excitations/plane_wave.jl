@@ -2,7 +2,7 @@
 using Penning.Constants
 
 
-struct PlaneWaveExcitationField <: AbstractField
+mutable struct PlaneWaveExcitationField <: AbstractField
     omega :: Float64
     E_0 :: Float64
 end

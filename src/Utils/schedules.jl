@@ -35,7 +35,7 @@ TimeInterval(interval::Number) = TimeInterval(Float64(interval), 0.0)
 
 """
     AlignedTimeInterval(interval, dt)
-Similar to [TimeInterval](@ref), but aligns the passed `interval` to multiples of `dt`.
+Similar to [TimeInterval](@ref), but aligns the `interval` to multiples of `dt`.
 Actually, this function returns an [IterationInterval](@ref) in order to guarantee for 
 exactly equidistant "actuation events".
 """

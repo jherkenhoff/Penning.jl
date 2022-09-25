@@ -67,7 +67,8 @@ export
     YParallelPlateElectrode,
     spherical_homogeneous_positions,
     cubic_homogeneous_positions,
-    boltzman_velocities
+    boltzman_velocities,
+    find_eigenfreqs
 
 abstract type AbstractInteraction end
 
@@ -88,6 +89,7 @@ include("ParticlePushers/ParticlePushers.jl")
 include("Diagnostics/Diagnostics.jl")
 include("OutputWriters/OutputWriters.jl")
 include("Simulations/Simulations.jl")
+include("Procedures/Procedures.jl")
 
 using .Utils
 using .Particles
@@ -102,5 +104,6 @@ using .Electrodes
 using .Diagnostics
 using .OutputWriters
 using .Simulations
+using .Procedures
 
 end

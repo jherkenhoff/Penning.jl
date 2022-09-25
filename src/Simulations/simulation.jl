@@ -50,14 +50,14 @@ end
 # end
 
 function finalize_simulation!(sim::Simulation)
-    for writer in sim.output_writers
+    for writer in values(sim.output_writers)
         finalize_output_writer!(writer)
     end
 end
 
 function reset!(sim::Simulation)
     reset!(sim.setup)
-    for (key, writer) in sim.output_writers
+    for writer in values(sim.output_writers)
         reset!(writer)
     end
     nothing

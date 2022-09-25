@@ -3,7 +3,7 @@ using Penning.Utils: cylindrical2cartesian, cartesian2cylindrical, cylindrical_u
 using Penning.Utils.Bessel
 using Penning.Constants
 
-struct TMCavityExcitationField <: AbstractField
+mutable struct TMCavityExcitationField <: AbstractField
     m :: Int
     n :: Int
     p :: Int

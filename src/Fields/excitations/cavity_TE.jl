@@ -3,7 +3,7 @@ using Penning.Utils
 using Penning.Utils.Bessel
 using Penning.Constants
 
-struct TECavityExcitation <: AbstractField
+mutable struct TECavityExcitation <: AbstractField
     m :: Int
     n :: Int
     p :: Int
