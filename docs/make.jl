@@ -6,7 +6,9 @@ using DocumenterCitations
 using Literate
 
 const EXAMPLES_DIR = joinpath(@__DIR__, "..", "examples")
-const OUTPUT_DIR   = joinpath(@__DIR__, "src/generated")
+const EXAMPLES_OUTPUT_DIR   = joinpath(@__DIR__, "src/generated/examples")
+const VALIDATION_DIR = joinpath(@__DIR__, "..", "studies/validation")
+const VALIDATION_OUTPUT_DIR   = joinpath(@__DIR__, "src/generated/validation")
 
 examples = [
     "basic_eigenmotion.jl",
@@ -14,16 +16,28 @@ examples = [
 
 for example in examples
     example_filepath = joinpath(EXAMPLES_DIR, example)
-    Literate.markdown(example_filepath, OUTPUT_DIR; flavor = Literate.DocumenterFlavor())
+    Literate.markdown(example_filepath, EXAMPLES_OUTPUT_DIR; flavor = Literate.DocumenterFlavor())
 end
 
-example_pages = 
+
+validations = [
+    "ion_detection/resistor_noiseless.jl",
+]
+
+for validation in validations
+    validation_filepath = joinpath(VALIDATION_DIR, validation)
+    Literate.markdown(validation_filepath, VALIDATION_OUTPUT_DIR; flavor = Literate.CommonMarkFlavor())
+end
+
+# copy some figures to the build directory
+cp(joinpath(VALIDATION_DIR, "ion_detection/resistor_noiseless.png"),
+   joinpath(VALIDATION_OUTPUT_DIR, "resistor_noiseless.png"); force = true)
 
 pages = [
     "Home" => "index.md",
     "Getting Started" => "getting_started.md",
     "Examples" => [
-        "Basic eigenmotion" => "generated/basic_eigenmotion.md",
+        "Basic eigenmotion" => "generated/examples/basic_eigenmotion.md",
     ],
     "Simulation setup" => [
         "Overview" => "simulation_setup/overview.md",
@@ -47,6 +61,11 @@ pages = [
     ],
     "Utils" => [
         "Schedules" => "utils/schedules.md"
+    ],
+    "Validation studies" => [
+        "Ion detection" => [
+            "Noiseless Resistor" => "generated/validation/resistor_noiseless.md",
+        ]
     ],
 ]
 
