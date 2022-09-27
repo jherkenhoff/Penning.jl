@@ -1,8 +1,8 @@
 using Penning.Setups
 
-struct PositionObservable <: AbstractVectorObservable
-    trap :: Symbol
-    particle_collection :: Symbol
+struct PositionObservable{T, PC} <: AbstractVectorObservable
+    trap :: T
+    particle_collection :: PC
     particle_index :: Integer
 end
 

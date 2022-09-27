@@ -39,7 +39,7 @@ pages = [
     "Examples" => [
         "Basic eigenmotion" => "generated/examples/basic_eigenmotion.md",
     ],
-    "Simulation setup" => [
+    "Setting up the simulation" => [
         "Overview" => "simulation_setup/overview.md",
         "Traps" => "simulation_setup/traps.md",
         "Particles" => "simulation_setup/particles.md",
