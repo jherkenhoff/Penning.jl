@@ -86,14 +86,14 @@ run!(sim)
 ## Gallery
 
 <img src="doc/particles-top.png" width="30%"></img>
-<img src="validation/single_particle_mode_coupling/avoided_crossing.png" width="30%"></img>
-<img src="validation/ion_detection/resonator_dip.png" width="30%"></img>
+<img src="studies/validation/single_particle_mode_coupling/avoided_crossing.png" width="30%"></img>
+<img src="studies/validation/ion_detection/resonator_dip.png" width="30%"></img>
 
-<img src="validation/fields/cavity.gif" width="30%"></img>
-<img src="validation/ion_detection/resonator_ss_double_dip.png" width="30%"></img>
-<img src="validation/fields/plane_wave.gif" width="30%"></img>
+<img src="studies/validation/fields/cavity.gif" width="30%"></img>
+<img src="studies/validation/ion_detection/resonator_ss_double_dip.png" width="30%"></img>
+<img src="studies/validation/fields/plane_wave.gif" width="30%"></img>
 
-<img src="validation/single_particle_mode_coupling/quadrupolar.png" width="30%"></img>
+<img src="studies/validation/single_particle_mode_coupling/quadrupolar.png" width="30%"></img>
 
 
 ## Circuit Simulator
