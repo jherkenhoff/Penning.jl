@@ -42,9 +42,10 @@ pages = [
     "Setting up the simulation" => [
         "Overview" => "simulation_setup/overview.md",
         "Traps" => "simulation_setup/traps.md",
+        "Fields" => "simulation_setup/fields.md",
         "Particles" => "simulation_setup/particles.md",
         "Particle interactions" => "simulation_setup/interactions.md",
-        "Excitations" => "simulation_setup/excitations.md"
+        "Detection electrodes" => "simulation_setup/electrodes.md",
     ],
     "Running the simulation" => [
         "Overview" => "simulation/overview.md",
