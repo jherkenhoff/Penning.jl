@@ -1,45 +1,22 @@
-# # Basic eigenmotion example
+# # Time dependent parameters example
 #
-# In this example, we are going to simulate the motion of a single ion stored inside 
-# a Penning trap. This example can be considered as the *hello world* of `Penning.jl`.
+# In this example, we are going to have a look at how to 
+# a Penning trap.
+#
 # You will learn how to:
 #  * Set up a simple simulation with one ion in an ideal Penning trap
 #  * Store simulation data (in this case the position of the ion) to memory
 #  * Access the simulation data
 #  * Plot the simulated ion motion
-#
-# ## Install dependencies
-#
-# First let's make sure we have all required packages installed.
-
-# ```julia
-# using Pkg
-# pkg"add Penning, Plots"
-# ```
-
-# ## Import dependencies
-#
-# In order to use the functionality of `Penning.jl`, we have to tell Julia
-# that we want to use this package. While we are at it, lets also import the
-# [Plots](https://docs.juliaplots.org/latest/) package:
 
 using Penning
 using Plots
 
-# ## Define trap parameters
-# 
-# Define some trap parameters for the ideal trap.
-# As you can see, the names of the constants contain unicode characters, which are
-# nice to read, but may seem hard to type at first glance.
-# However, if you are a Julia developer, chances are high that you are using
-# [Visual Studio Code](https://code.visualstudio.com/) with the 
-# [Julia extension](https://code.visualstudio.com/docs/languages/julia), which makes
-# typing unicode characters a breeze: You just have to type `U\_0` and hit enter or tab
-# and VS Code will add the correct unicode symbol.
+const dt = 20e-9
 
-const U₀ = -50.0
-const c₂ = -14960.0
-const B₀ = 1.0
+U₀ = ConstantParameter(-50.0) + LinearDriftParameter(3e6)
+c₂ = ConstantParameter(-14960.0)
+B₀ = ConstantParameter(1.0)
 
 # ## Instantiate trap
 #
@@ -99,8 +76,8 @@ setup = Setup(
 # is to be saved. In this case, we want to store data at every simulation iteration.
 
 sim = Simulation(
-    setup, 
-    dt=20e-9,
+    setup,
+    dt=dt,
     output_writers=(
         MemoryWriter(PositionObservable(1, 1, 1), IterationInterval(1)),
     )
@@ -125,17 +102,4 @@ x = getindex.(r, 1)
 y = getindex.(r, 2)
 z = getindex.(r, 3)
 
-plot(t*1e6, z*1e6)
-xlabel!("\$t\$ / ms")
-ylabel!("Axial position / µm")
-savefig(joinpath(@__DIR__, "img/basic_eigenmotion_z.png"))
-
-
-plot(t*1e6, x*1e6)
-xlabel!("\$t\$ / ms")
-ylabel!("X position / µm")
-savefig(joinpath(@__DIR__, "img/basic_eigenmotion_x.png"))
-
-# ## Results
-# ![](img/basic_eigenmotion_z.png)
-# ![](img/basic_eigenmotion_x.png)
+plot(t, z)

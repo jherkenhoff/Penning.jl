@@ -30,7 +30,7 @@ ion = Ion(187, 30)
 
 omega_p, omega_m, omega_z = find_eigenfreqs(U₀, c₂, B₀, ion, OVERSAMPLING)
 
-Threads.@threads for i = 1:1
+Threads.@threads for i = 1:4
     trap = Trap(
         fields = (
             trap     = IdealTrapField(U₀, c₂, B₀),
