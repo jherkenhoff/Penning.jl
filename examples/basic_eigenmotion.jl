@@ -125,4 +125,17 @@ x = getindex.(r, 1)
 y = getindex.(r, 2)
 z = getindex.(r, 3)
 
-plot(t, z)
+plot(t*1e6, z*1e6)
+xlabel!("\$t\$ / ms")
+ylabel!("Axial position / µm")
+savefig(joinpath(@__DIR__, "basic_eigenmotion_z.png"))
+
+
+plot(t*1e6, x*1e6)
+xlabel!("\$t\$ / ms")
+ylabel!("X position / µm")
+savefig(joinpath(@__DIR__, "basic_eigenmotion_x.png"))
+
+# ## Results
+# ![](basic_eigenmotion_z.png)
+# ![](basic_eigenmotion_x.png)
