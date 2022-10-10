@@ -51,7 +51,22 @@ function harminv(t::Vector{Float64}, re::Vector{Float64}, fmin::Real, fmax::Real
     end
 
     return result
+end
 
+
+function harminv_primary(t::Vector{Float64}, re::Vector{Float64}, fmin::Real, fmax::Real)
+    harminv_results = harminv(t, re, fmin, fmax)
+    
+    global amp_max = 0.0
+    global i_max = 0
+    for (i, res) in enumerate(harminv_results)
+        if res.amp >= amp_max
+            global i_max = i
+            global amp_max = res.amp
+        end
+    end
+
+    return harminv_results[i_max]
 end
 
 function Base.show(io::IO, res::HarminvResult)
