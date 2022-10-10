@@ -1,5 +1,6 @@
 module Utils
 
+export AbstractParameter, ConstantParameter, AddParameter, LinearDriftParameter, GaussianNoiseParameter
 export cylindrical2cartesian, cartesian2cylindrical, cylindrical_unit_vectors
 export prettytime
 export prettysummary
@@ -7,7 +8,7 @@ export prettykeys
 export dict_show
 export safe_divide
 export AbstractSchedule, TimeInterval, AlignedTimeInterval, IterationInterval, WallTimeInterval, SpecifiedTimes, ConsecutiveIterations, AndSchedule, OrSchedule
-export harminv
+export harminv, harminv_primary
 export prettyfrequency
 export calc_omega_z
 export calc_omega_c
@@ -15,6 +16,7 @@ export calc_omega_p
 export calc_omega_m
 export calc_eigenfrequencies
 
+include("parameters.jl")
 include("coordinate_transforms.jl")
 include("ideal_penning_trap.jl")
 include("prettytime.jl")

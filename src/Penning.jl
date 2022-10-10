@@ -26,6 +26,7 @@ export
     finalize!,
     get_electrode_voltage,
     harminv,
+    harminv_primary,
     IdealTrapField,
     Ion,
     IterationInterval, 
@@ -67,6 +68,11 @@ export
     YParallelPlateElectrode,
     spherical_homogeneous_positions,
     cubic_homogeneous_positions,
+    AbstractParameter, 
+    ConstantParameter, 
+    AddParameter,
+    LinearDriftParameter,
+    GaussianNoiseParameter,
     boltzman_velocities,
     find_eigenfreqs
 
