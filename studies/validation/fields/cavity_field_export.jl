@@ -1,16 +1,27 @@
 using Penning
 
 const OVERSAMPLING = 100
-cavity = TMCavityExcitation(1, 2, 2, 3e-3, 3e-3)
 
-trap = IdealTrap(5.0, -14960.0, 7.0)
-trap.excitations[:cavity] = cavity
+trap = Trap(
+    fields = (
+        TMCavityExcitationField(1, 2, 2, 3e-3, 3e-3),
+    )
+)
 
-setup = Setup()
-setup.traps[:trap] = trap
+setup = Setup(
+    traps = (
+        trap,
+    )
+)
 
-sim = Simulation(setup, dt=2*pi/cavity.omega/OVERSAMPLING, stop_iteration=OVERSAMPLING)
+sim = Simulation(
+    setup, 
+    dt=dt=2*pi/trap.fields[1].ω/OVERSAMPLING,
+    output_writers=(
+        VtkFieldWriter("studies/data/excitation_field", 1, 1, VolumeExtractor(6e-3, 6e-3, 6e-3, nx=60, ny=60, nz=60), IterationInterval(1)),
+    )
+)
 
-sim.output_writers[:excitation_field] = VtkFieldWriter("studies/data/excitation_field", trap.excitations[:cavity], VolumeExtractor(6e-3, 6e-3, 6e-3, nx=20, ny=20, nz=20), IterationInterval(1))
+run!(sim, run_until_iteration=OVERSAMPLING)
 
-run!(sim)
+finalize!(sim)
