@@ -49,6 +49,10 @@ function (writer::VtkParticleWriter)(setup::Setup)
     end
 end
 
-function finalize_output_writer!(writer::VtkParticleWriter)
+function checkpoint!(writer::VtkParticleWriter)
+    vtk_save(writer.pvd)
+end
+
+function finalize!(writer::VtkParticleWriter)
     vtk_save(writer.pvd)
 end

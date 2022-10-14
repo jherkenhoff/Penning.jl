@@ -30,6 +30,7 @@ export
     IdealTrapField,
     Ion,
     IterationInterval, 
+    SingleParticleSelection,
     MemoryWriter, 
     ModifiedBorisPusher,
     OrSchedule,
@@ -39,6 +40,7 @@ export
     PositionComponentObservable,
     PositionMemoryWriter, 
     PositionObservable,
+    observe,
     ProgressDiagnostic,
     QuadrupolarExcitationField,
     RadialParallelPlateElectrode,
@@ -80,6 +82,7 @@ abstract type AbstractInteraction end
 
 reset!() = nothing
 
+include("Common.jl")
 include("Constants.jl")
 include("Utils/Utils.jl")
 include("Particles/Particles.jl")
@@ -89,6 +92,7 @@ include("Circuits/Circuits.jl")
 include("Fields/Fields.jl")
 include("Traps/Traps.jl")
 include("Setups/Setups.jl")
+include("Selections/Selections.jl")
 include("Observables/Observables.jl")
 include("energy.jl")
 include("ParticlePushers/ParticlePushers.jl")
@@ -97,11 +101,13 @@ include("OutputWriters/OutputWriters.jl")
 include("Simulations/Simulations.jl")
 include("Procedures/Procedures.jl")
 
+using .Common
 using .Utils
 using .Particles
 using .Traps
 using .Circuits
 using .Setups
+using .Selections
 using .Observables
 using .ParticlePushers
 using .Fields

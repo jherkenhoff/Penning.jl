@@ -40,6 +40,10 @@ function (writer::VtkFieldWriter)(setup::Setup)
     end
 end
 
+function checkpoint!(writer::VtkFieldWriter)
+    vtk_save(writer.pvd)
+end
+
 function finalize!(writer::VtkFieldWriter)
     vtk_save(writer.pvd)
 end

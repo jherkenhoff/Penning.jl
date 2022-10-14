@@ -91,9 +91,9 @@ setup = Setup(
 # In this case we are using a [`MemoryWriter`](@ref), which stores data into
 # system memory (RAM).
 #
-# The code `PositionObservable(1, 1, 1)` tells our MemoryWriter that we want to store
-# the position of the particle in trap `1`, particle collection `1` and index `1`.
-# (Note that the first index in Julia is 1, not 0)
+# The code `PositionObservable()` tells our MemoryWriter that we want to store
+# the position of a particle. The code `SingleParticleSelection` selects the particle of which we want
+# to save the position. (Note that the first index in Julia is 1, not 0)
 #
 # The code `IterationInterval(1)` specifies the times at which the specified observable
 # is to be saved. In this case, we want to store data at every simulation iteration.
@@ -101,8 +101,12 @@ setup = Setup(
 sim = Simulation(
     setup, 
     dt=20e-9,
-    output_writers=(
-        MemoryWriter(PositionObservable(1, 1, 1), IterationInterval(1)),
+    output_writers = (
+        MemoryWriter(
+            PositionObservable(),
+            SingleParticleSelection(trap=1, particle_collection=1, particle_index=1),
+            IterationInterval(1)
+        ),
     )
 )
 

@@ -1,53 +1,45 @@
-using Penning.Setups
 
-struct PositionObservable{T, PC} <: AbstractVectorObservable
-    trap :: T
-    particle_collection :: PC
-    particle_index :: Integer
+
+struct PositionObservable <: AbstractSingleParticleVectorObservable
 end
 
-function (obs::PositionObservable)(setup::Setup)
-    return setup.traps[obs.trap].particles[obs.particle_collection].r[obs.particle_index]
+function observe(observable::PositionObservable, selection::AbstractSingleParticleSelection, setup::Setup)
+    return get_particle_r(selection, setup)
 end
 
 
 
-
-struct PositionComponentObservable{T, PC} <: AbstractScalarObservable
-    trap :: T
-    particle_collection :: PC
-    particle_index :: Integer
+struct PositionComponentObservable <: AbstractSingleParticleScalarObservable
     component :: Integer
 end
 
-function (obs::PositionComponentObservable)(setup::Setup)
-    return setup.traps[obs.trap].particles[obs.particle_collection].r[obs.particle_index][obs.component]
+function observe(observable::PositionComponentObservable, selection::AbstractSingleParticleSelection, setup::Setup)
+    return get_particle_r(selection, setup)[observable.component]
 end
 
 
 
 
-struct VelocityObservable <: AbstractVectorObservable
-    trap :: Symbol
-    particle_collection :: Symbol
-    particle_index :: Integer
-end
+# struct VelocityObservable <: AbstractSingleParticleVectorObservable
+#     trap :: Symbol
+#     particle_collection :: Symbol
+#     particle_index :: Integer
+# end
 
-function (obs::VelocityObservable)(setup::Setup)
-    return setup.traps[obs.trap].particles[obs.particle_collection].v[obs.particle_index]
-end
-
-
+# function (obs::VelocityObservable)(setup::Setup)
+#     return setup.traps[obs.trap].particles[obs.particle_collection].v[obs.particle_index]
+# end
 
 
-struct VelocityComponentObservable <: AbstractScalarObservable
-    trap :: Symbol
-    particle_collection :: Symbol
-    particle_index :: Integer
-    component :: Integer
-end
 
-function (obs::VelocityComponentObservable)(setup::Setup)
-    return setup.traps[obs.trap].particles[obs.particle_collection].v[obs.particle_index][obs.component]
-end
 
+# struct VelocityComponentObservable <: AbstractSingleParticleScalarObservable
+#     trap :: Symbol
+#     particle_collection :: Symbol
+#     particle_index :: Integer
+#     component :: Integer
+# end
+
+# function (obs::VelocityComponentObservable)(setup::Setup)
+#     return setup.traps[obs.trap].particles[obs.particle_collection].v[obs.particle_index][obs.component]
+# end

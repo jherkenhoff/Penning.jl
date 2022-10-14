@@ -1,6 +1,8 @@
 module OutputWriters
 
+import Penning.Common: finalize!, checkpoint!
 using Penning.Utils
+using Penning.Selections
 using Penning.Observables
 using Penning.Setups
 
@@ -13,15 +15,17 @@ export
     VtkParticleWriter,
     VtkFieldWriter,
     MemoryWriter, PositionMemoryWriter, CircuitMemoryWriter,
-    finalize_output_writer!,
+    finalize!,
+    checkpoint!,
     init_output_writer!
  
 
 abstract type AbstractOutputWriter end
 
+checkpoint!(writer::AbstractOutputWriter) = nothing
+finalize!(writer::AbstractOutputWriter) = nothing
 reset!(writer::AbstractOutputWriter) = nothing
 init_output_writer!(writer::AbstractOutputWriter, setup::Setup) = nothing
-finalize_output_writer!(writer::AbstractOutputWriter) = nothing
 
 include("output_writer_utils.jl")
 include("FieldExtractors/FieldExtractors.jl")
