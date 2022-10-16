@@ -51,6 +51,7 @@ pages = [
         "Overview" => "simulation/overview.md",
         "Particle integrators" => "simulation/integrators.md",
         "Distributed / parallel computing" => "simulation/distributed_parallel.md",
+        "Observables" => "simulation/observables.md",
     ],
     "Output writers" => [
         "Overview" => "output_writers/overview.md"
