@@ -4,9 +4,6 @@ using Penning.Utils
 @testset "Parameters" begin
     @info "Testing parameters..."
 
-
-    t = 0.0
-
     @testset "ConstantParameter" begin
         # Float parameter
         param = ConstantParameter(5e-3)
@@ -33,6 +30,6 @@ using Penning.Utils
         param_a = ConstantParameter(8)
         param_b = ConstantParameter(3)
         param = param_a + param_b
-        @test param(t) == 11
+        @test param(0.0) == 11
     end
 end

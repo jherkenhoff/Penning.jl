@@ -1,7 +1,7 @@
 name = "Penning"
 uuid = "0d70b53b-253d-4784-b4a0-96e42c2003f1"
 authors = ["jherkenhoff <jherkenhoff@mailbox.org>"]
-version = "0.1.0"
+version = "0.1.1"
 
 [deps]
 ArrayInterface = "4fba245c-0d91-5ea0-9b3e-6abc04ee57a9"

@@ -6,6 +6,7 @@ using Penning.Fields
 using Penning.Interactions
 using Penning.Electrodes
 using Penning.Circuits
+using Penning.OutputWriters
 
 function run!(sim::Simulation; pickup::Bool=false,
               run_until_time = Inf,
@@ -71,7 +72,7 @@ function run!(sim::Simulation; pickup::Bool=false,
         end
     end
 
-    finalize_simulation!(sim)
+    checkpoint!(sim)
 
     nothing
 end
@@ -101,7 +102,7 @@ function time_step!(sim::Simulation)
         diag.schedule(sim.setup) && diag(sim.setup)
     end
     for writer in values(sim.output_writers)
-        writer.schedule(sim.setup) && writer(sim.setup)
+        writer.schedule(sim.setup) && write_output(writer, sim.setup)
     end
     for callback in values(sim.callbacks)
         callback.schedule(sim.setup) && callback(sim)
@@ -120,15 +121,22 @@ end
 end
 
 function update_trap_fields!(trap::Trap, t::Number)
+    # TODO: Refactor and make it less ugly
     for particle_collection in values(trap.particles)
         for i in 1:N_particles(particle_collection)
-            for (i_f, field) in enumerate(values(trap.fields))
-                if i_f == 1
-                    set_E_field!(field, particle_collection.E[i], particle_collection.r[i], t)
-                    set_B_field!(field, particle_collection.B[i], particle_collection.r[i], t)
-                else
-                    add_E_field!(field, particle_collection.E[i], particle_collection.r[i], t)
-                    add_B_field!(field, particle_collection.B[i], particle_collection.r[i], t)
+            if (length(trap.fields) == 0)
+                # If there are no fields, explicitly set the fields to zero
+                particle_collection.E[i] .= 0.0
+                particle_collection.B[i] .= 0.0
+            else
+                for (i_f, field) in enumerate(values(trap.fields))
+                    if i_f == 1
+                        set_E_field!(field, particle_collection.E[i], particle_collection.r[i], t)
+                        set_B_field!(field, particle_collection.B[i], particle_collection.r[i], t)
+                    else
+                        add_E_field!(field, particle_collection.E[i], particle_collection.r[i], t)
+                        add_B_field!(field, particle_collection.B[i], particle_collection.r[i], t)
+                    end
                 end
             end
         end

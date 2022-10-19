@@ -2,7 +2,7 @@ using Penning.Traps
 using Penning.Particles
 using Penning.Circuits
 
-import Penning
+import Penning.Common
 
 struct Setup{T, CIR, CON}
     traps :: T
@@ -18,7 +18,7 @@ function Setup(; traps, circuits=(;), connections=(;))
 end
 
 
-function Penning.reset!(setup::Setup)
+function Common.reset!(setup::Setup)
     reset!(setup.clock)
 end
 

@@ -63,7 +63,7 @@ trap = Trap(
         IdealTrapField(U₀, c₂, B₀),
     ),
     particles = (
-        ParticleCollection(Ion(187, 30), [[0, 0, 50e-6]], [[1000, 0, 0]]),
+        ParticleCollection(Ion(187, 30), [[50e-6, 0, 50e-6]], [[100, 0, 0]]),
     )
 )
 

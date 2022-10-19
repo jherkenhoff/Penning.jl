@@ -1,35 +1,35 @@
 using Penning.Setups
 
-struct SingleParticleSelection{T, PC, PI} <: AbstractSingleParticleSelection
+struct SingleParticleSelection{T, PC} <: AbstractParticleSelection
     trap :: T
     particle_collection :: PC
-    particle_index :: PI
+    particle_index :: Integer
 end
 
-function SingleParticleSelection(;trap, particle_collection, particle_index)
+function SingleParticleSelection(;trap, particle_collection, particle_index::Integer)
     return SingleParticleSelection(trap, particle_collection, particle_index)
 end
 
-function get_particle_q(p::SingleParticleSelection, setup::Setup)
-    return setup.traps[p.trap].particles[p.particle_collection].species.q
+function get_particle_selection_q(s::SingleParticleSelection, setup::Setup)
+    return setup.traps[s.trap].particles[s.particle_collection].species.q
 end
 
-function get_particle_m(p::SingleParticleSelection, setup::Setup)
-    return setup.traps[p.trap].particles[p.particle_collection].species.m
+function get_particle_selection_m(s::SingleParticleSelection, setup::Setup)
+    return setup.traps[s.trap].particles[s.particle_collection].species.m
 end
 
-function get_particle_r(p::SingleParticleSelection, setup::Setup)
-    return setup.traps[p.trap].particles[p.particle_collection].r[p.particle_index]
+function get_particle_selection_r(s::SingleParticleSelection, setup::Setup)
+    return setup.traps[s.trap].particles[s.particle_collection].r[s.particle_index]
 end
 
-function get_particle_v(p::SingleParticleSelection, setup::Setup)
-    return setup.traps[p.trap].particles[p.particle_collection].v[p.particle_index]
+function get_particle_selection_v(s::SingleParticleSelection, setup::Setup)
+    return setup.traps[s.trap].particles[s.particle_collection].v[s.particle_index]
 end
 
-function get_particle_E(p::SingleParticleSelection, setup::Setup)
-    return setup.traps[p.trap].particles[p.particle_collection].E[p.particle_index]
+function get_particle_selection_E(s::SingleParticleSelection, setup::Setup)
+    return setup.traps[s.trap].particles[s.particle_collection].E[s.particle_index]
 end
 
-function get_particle_B(p::SingleParticleSelection, setup::Setup)
-    return setup.traps[p.trap].particles[p.particle_collection].B[p.particle_index]
+function get_particle_selection_B(s::SingleParticleSelection, setup::Setup)
+    return setup.traps[s.trap].particles[s.particle_collection].B[s.particle_index]
 end

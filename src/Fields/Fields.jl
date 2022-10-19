@@ -6,6 +6,7 @@ export
     DipolarExcitationField,
     QuadrupolarExcitationField,
     PlaneWaveExcitationField,
+    TMCavityExcitationField,
     calc_E_field,
     set_E_field!,
     add_E_field!,

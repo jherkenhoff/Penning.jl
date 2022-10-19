@@ -35,7 +35,7 @@ function VectorComponentObservable(child_observable::AbstractVectorObservable, c
     return VectorComponentObservable(child_observable, i)
 end
 
-function observe(observable::VectorComponentObservable, selection::AbstractSingleParticleSelection, setup::Setup)
+function observe(observable::VectorComponentObservable, selection::AbstractParticleSelection, setup::Setup)
     vec = observe(observable.child_observable, selection, setup)
-    return vec[observable.component]
+    return getindex.(vec, observable.component)
 end

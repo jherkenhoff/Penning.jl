@@ -16,6 +16,8 @@ export
     calc_total_energy,
     calc_trap_PE,
     Callback,
+    EFieldObservable,
+    BFieldObservable,
     CircuitMemoryWriter,
     CoulombInteraction,
     Connection,
@@ -31,6 +33,7 @@ export
     Ion,
     IterationInterval, 
     SingleParticleSelection,
+    MultiParticleSelection,
     MemoryWriter, 
     ModifiedBorisPusher,
     OrSchedule,
@@ -75,11 +78,8 @@ export
     LinearDriftParameter,
     GaussianNoiseParameter,
     boltzman_velocities,
-    find_eigenfreqs
-
-abstract type AbstractInteraction end
-
-reset!() = nothing
+    find_eigenfreqs,
+    AllParticleSelection
 
 include("Common.jl")
 include("Constants.jl")

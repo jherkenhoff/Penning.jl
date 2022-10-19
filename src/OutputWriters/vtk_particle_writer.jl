@@ -5,41 +5,36 @@ using Penning.Constants
 using Penning.Particles
 using Penning.Setups
 using Penning.Traps
+using Penning.Observables
+using Penning.Selections
 
-struct VtkParticleWriter{P, T, PA} <: AbstractOutputWriter
-    schedule::AbstractSchedule
-    trap :: T
-    particles :: PA
+struct VtkParticleWriter{SEL<:AbstractParticleSelection, O, P, SCH<:AbstractSchedule} <: AbstractOutputWriter
+    selection::SEL
+    observables :: O
     pvd :: P
     filepath :: String
+    schedule::SCH
 end
 
-function VtkParticleWriter(filepath::String, trap, particles, schedule::AbstractSchedule)
-
+function VtkParticleWriter(filepath::String, selection::AbstractParticleSelection, schedule::AbstractSchedule; observables=(;))
     pvd = paraview_collection(filepath)
-
-    return VtkParticleWriter(schedule, trap, particles, pvd, filepath)
+    return VtkParticleWriter(selection, observables, pvd, filepath, schedule)
 end
 
-function (writer::VtkParticleWriter)(setup::Setup)
+function write_output(writer::VtkParticleWriter, setup::Setup)
     filename = "$(writer.filepath)_$(setup.clock.iteration)"
 
-    trap = setup.traps[writer.trap]
-    r = trap.particles[writer.particles].r
-    v = trap.particles[writer.particles].v
-    q = trap.particles[writer.particles].species.q
-    m = trap.particles[writer.particles].species.m
+    r = get_particle_selection_r(writer.selection, setup)
 
-    #PE = calc_PE.((trap,), r, (q,))
-
-    KE = [1/2 * m * v_single.^2 for v_single in v]
-
-    N = N_particles(setup.traps[writer.trap].particles[writer.particles])
-    cells = [MeshCell(VTKCellTypes.VTK_VERTEX, (i, )) for i = 1:N]
+    cells = [MeshCell(VTKCellTypes.VTK_VERTEX, (i, )) for i = 1:length(r)]
 
     vtk_grid(filename, reduce(hcat, r), cells, compress=false) do vtk
+        for (key, observable) in pairs(writer.observables)
+            obs = observe(observable, writer.selection, setup)
+            vtk[String(key)] = reduce(hcat, obs)
+        end
         #vtk["PE_TRAP"] = reduce(hcat, PE)/e
-        vtk["KE"] = reduce(hcat, KE)
+        #vtk["KE"] = reduce(hcat, KE)
 
         # Write to disk
         vtk_save(vtk)
@@ -49,10 +44,10 @@ function (writer::VtkParticleWriter)(setup::Setup)
     end
 end
 
-function checkpoint!(writer::VtkParticleWriter)
+function Common.checkpoint!(writer::VtkParticleWriter)
     vtk_save(writer.pvd)
 end
 
-function finalize!(writer::VtkParticleWriter)
+function Common.finalize!(writer::VtkParticleWriter)
     vtk_save(writer.pvd)
 end

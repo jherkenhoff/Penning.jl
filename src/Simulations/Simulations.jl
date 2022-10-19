@@ -4,9 +4,7 @@ export Callback
 export 
     Simulation,
     add_diagnostic!,
-    run!, 
-    finalize!,
-    reset!
+    run!
 
 include("callback.jl")
 include("simulation.jl")

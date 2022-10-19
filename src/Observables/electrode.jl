@@ -1,14 +1,14 @@
 
 using Penning.Electrodes
 using Penning.Circuits
+using Penning.Selections
 
 struct ElectrodeVoltageObservable <: AbstractScalarObservable
-    trap :: Symbol
-    electrode :: Symbol
+    electrode_seleciton :: AbstractElectrodeSelection
 end
 
 function (obs::ElectrodeVoltageObservable)(setup::Setup)
-    return setup.traps[obs.trap].electrodes[obs.trap].u
+    return get_electrode_selection_voltage(obs.electrode_seleciton, setup)
 end
 
 

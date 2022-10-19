@@ -16,27 +16,16 @@ A `MemoryWriter` writes the value of an `observable`
 into memory (ram) at time intervals specified by `schedule`.
 Each time data is saved, the current simulation time is saved alongside with the data.
 """
-function MemoryWriter(observable::AbstractScalarObservable, selection::AbstractSingleParticleSelection, schedule::AbstractSchedule)
+
+function MemoryWriter(observable::AbstractScalarObservable, selection::SingleParticleSelection, schedule::AbstractSchedule)
     t = Vector{Float64}()
     mem = Vector{Float64}()
     return MemoryWriter(observable, selection, t, mem, schedule)
 end
 
-function MemoryWriter(observable::AbstractScalarObservable, selection::AbstractMultiParticleSelection, schedule::AbstractSchedule)
-    t = Vector{Float64}()
-    mem = Vector{Vector{Float}}()
-    return MemoryWriter(observable, selection, t, mem, schedule)
-end
-
-function MemoryWriter(observable::AbstractVectorObservable, selection::AbstractSingleParticleSelection, schedule::AbstractSchedule)
+function MemoryWriter(observable::AbstractVectorObservable, selection::SingleParticleSelection, schedule::AbstractSchedule)
     t = Vector{Float64}()
     mem = Vector{Vector{Float64}}()
-    return MemoryWriter(observable, selection, t, mem, schedule)
-end
-
-function MemoryWriter(observable::AbstractVectorObservable, selection::AbstractMultiParticleSelection, schedule::AbstractSchedule)
-    t = Vector{Float64}()
-    mem = Vector{Vector{Vector{Float64}}}()
     return MemoryWriter(observable, selection, t, mem, schedule)
 end
 

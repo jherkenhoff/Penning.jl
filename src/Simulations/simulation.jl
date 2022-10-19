@@ -1,12 +1,12 @@
 
+import Penning.Common: finalize!, checkpoint!
 using Penning.Utils
 using Penning.Setups
 using Penning.ParticlePushers
 using Penning.Diagnostics
 using Penning.OutputWriters
 
-import Penning: reset!
-
+import Penning.Common
 
 mutable struct Simulation{D, OW, CB}
     setup :: Setup
@@ -39,7 +39,6 @@ function Simulation(setup::Setup;
         0.0)
 end
 
-
 # function Base.show(io::IO, s::Simulation)
 #     setupstr = summary(s.setup)
 #     return print(io, "Simulation of ", setupstr, '\n',
@@ -49,13 +48,19 @@ end
 #                      "└── Diagnostics: $(dict_show(s.diagnostics, "│"))")
 # end
 
-function finalize_simulation!(sim::Simulation)
+function Common.checkpoint!(sim::Simulation)
     for writer in values(sim.output_writers)
-        finalize_output_writer!(writer)
+        checkpoint!(writer)
     end
 end
 
-function reset!(sim::Simulation)
+function Common.finalize!(sim::Simulation)
+    for writer in values(sim.output_writers)
+        finalize!(writer)
+    end
+end
+
+function Common.reset!(sim::Simulation)
     reset!(sim.setup)
     for writer in values(sim.output_writers)
         reset!(writer)

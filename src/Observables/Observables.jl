@@ -9,6 +9,8 @@ export
     AbstractVectorObservable,
     PositionObservable,
     VelocityObservable,
+    EFieldObservable,
+    BFieldObservable,
     ElectrodeVoltageObservable,
     ElectrodeCurrentObservable,
     SingleParticleTotalEnergy,
@@ -31,6 +33,7 @@ abstract type AbstractCollectiveParticleVectorObservable <: AbstractVectorObserv
 include("kinetic.jl")
 include("energetic.jl")
 include("electrode.jl")
+include("field.jl")
 include("vector_component_observable.jl")
 
 end # module

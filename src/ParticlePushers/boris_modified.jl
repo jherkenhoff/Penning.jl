@@ -6,7 +6,9 @@ end
 
 function update_velocity!(pusher::ModifiedBorisPusher, v::AbstractVector{<:Number}, E::AbstractVector{<:Number}, B::AbstractVector{<:Number}, damping::AbstractVector{<:Number}, q::Number, m::Number, dt::Number)
     # TODO: tan() can be approximated to gain speed (?)
-    f1 = tan(q*dt/m/2*norm(B))/norm(B)
+    norm_B = norm(B)
+    if norm_B == 0.0 throw(DomainError("Zero B-field is not supported by ModifiedBorisPusher")) end
+    f1 = tan(q*dt/m/2*norm_B)/norm_B
     f2 = 2*f1/(1+f1^2*dot(B, B))
 
     v1 = v + q / m * E * dt / 2
