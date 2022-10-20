@@ -64,8 +64,8 @@ setup = Setup(
     circuits = (
         CircuitResistor(R, T=0.0),
     ),
-    connections = (
-        Connection(trap=1, electrode=1, circuit=1, circuit_pin=1),
+    circuit_connections = (
+        CircuitConnection(ElectrodeSelection(trap=1, electrode=1), CircuitPinSelection(circuit=1, pin=1)),
     )
 )
 
@@ -73,7 +73,11 @@ sim = Simulation(
     setup, 
     dt=2*pi/omega_z/OVERSAMPLING,
     output_writers=(
-        MemoryWriter(PositionComponentObservable(1, 1, 1, 3), IterationInterval(4)),
+        MemoryWriter(
+            VectorComponentObservable(PositionObservable(), 3), 
+            SingleParticleSelection(trap=1, particle_collection=1, particle_index=1), 
+            IterationInterval(4)
+        ),
     )
 )
 

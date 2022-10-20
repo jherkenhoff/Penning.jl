@@ -1,41 +1,62 @@
 using Penning
 
-const N = 100
+const N = 1000
 const SIM_TIME = 0.001
-const OVERSAMPLING = 40
+const OVERSAMPLING = 20
 
-const D_eff = 0.4e-3
-const R = 10e6
-
-U₀ = -50.0
-c₂ = -14960.0
-B₀ = 1.0
+const U₀ = -50.0
+const c₂ = -14960.0
+const B₀ = 1.0
 
 Re = Ion(187, 30)
 
-omega_p = calc_omega_p(U₀, c₂, B₀, Re.q, Re.m)
-omega_z = calc_omega_z(U₀, c₂, B₀, Re.q, Re.m)
+omega_c, omega_p, omega_m, omega_z = calc_eigenfrequencies(U₀, c₂, B₀, Re.q, Re.m)
 
-trap1 = Trap(
+trap = Trap(
     fields = (
         IdealTrapField(U₀, c₂, B₀),
     ),
-    particles = (ParticleCollection(Re, cubic_homogeneous_positions(N, 6e-4), boltzman_velocities(N, 4.2)),),
-    interactions = ( CoulombInteraction(), ),
+    particles = (
+        ParticleCollection(Re, spherical_homogeneous_positions(N, 6e-4), boltzman_velocities(N, 2000.2)),
+    ),
+    interactions = (
+        CoulombInteraction(),
+    ),
+    electrodes = (
+        AxialParallelPlateElectrode(5e-3),
+    )
 )
-
 
 setup = Setup(
-    traps = (trap1, ),
+    traps = (
+        trap,
+    ),
+    circuits = (
+        CircuitResistor(100e6),
+    ),
+    circuit_connections = (
+        CircuitConnection(ElectrodeSelection(trap=1, electrode=1), CircuitPinSelection(circuit=1, pin=1)),
+    )
 )
 
-dt = 2*pi/omega_p/OVERSAMPLING
-sim = Simulation(setup, 
+dt = 2*pi/omega_c / OVERSAMPLING
+sim = Simulation(
+    setup,
     dt=dt,
-    stop_time=SIM_TIME,
-    #output_writers = (
-     #   VtkParticleWriter("studies/data/particles", 1, 1, IterationInterval(1)),
-    #)
+    output_writers = (
+        VtkParticleWriter(
+            "studies/data/particles",
+            AllParticleSelection(setup),
+            IterationInterval(1),
+            observables = (
+                V = VelocityObservable(),
+                E = EFieldObservable(),
+                KE = KineticEnergyObservable()
+            )
+        ),
+    )
 )
 
-@time run!(sim)
+run!(sim, run_until_time=10e-6)
+
+finalize!(sim)

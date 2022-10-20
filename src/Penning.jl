@@ -8,7 +8,8 @@ export
     calc_eigenfrequencies,
     calc_electrode_PE,
     calc_kinetic_energy, 
-    calc_omega_c, 
+    calc_omega_c,
+    CircuitPinSelection,
     calc_omega_m,
     calc_omega_p, 
     calc_omega_z, 
@@ -18,13 +19,15 @@ export
     Callback,
     EFieldObservable,
     BFieldObservable,
+    KineticEnergyObservable,
     CircuitMemoryWriter,
     CoulombInteraction,
-    Connection,
+    CircuitConnection,
     DashboardDiagnostic,
     DipolarExcitationField,
     ElectrodeVoltageObservable,
-    Electron, 
+    Electron,
+    ElectrodeSelection,
     finalize!,
     get_electrode_voltage,
     harminv,
@@ -92,6 +95,7 @@ include("Fields/Fields.jl")
 include("Traps/Traps.jl")
 include("Setups/Setups.jl")
 include("Selections/Selections.jl")
+include("CircuitConnections/CircuitConnections.jl")
 include("Observables/Observables.jl")
 include("energy.jl")
 include("ParticlePushers/ParticlePushers.jl")
@@ -107,6 +111,7 @@ using .Traps
 using .Circuits
 using .Setups
 using .Selections
+using .CircuitConnections
 using .Observables
 using .ParticlePushers
 using .Fields

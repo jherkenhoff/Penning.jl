@@ -2,7 +2,6 @@ module Setups
 
 export
     Setup,
-    Connection,
     add_trap!,
     add_particle_collection!,
     add_field!,
@@ -11,6 +10,5 @@ export
 
 include("clock.jl")
 include("setup.jl")
-include("connection.jl")
 
 end # modules

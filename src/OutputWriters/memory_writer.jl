@@ -29,11 +29,11 @@ function MemoryWriter(observable::AbstractVectorObservable, selection::SinglePar
     return MemoryWriter(observable, selection, t, mem, schedule)
 end
 
-function (writer::MemoryWriter)(setup::Setup)
+function write_output(writer::MemoryWriter, setup::Setup)
     t = setup.clock.time
     push!(writer.t, t)
-    r = observe(writer.observable, writer.selection, setup)
-    push!(writer.mem, deepcopy(r))
+    obs = observe(writer.observable, writer.selection, setup)
+    push!(writer.mem, deepcopy(obs))
     nothing
 end
 

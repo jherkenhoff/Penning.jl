@@ -3,6 +3,16 @@ using Penning.Traps
 using Penning.Electrodes
 using Penning.Constants: e
 
+struct KineticEnergyObservable <: AbstractSingleParticleScalarObservable
+end
+
+function observe(observable::KineticEnergyObservable, selection::AbstractParticleSelection, setup::Setup)
+    v = get_particle_selection_v(selection, setup)
+    m = get_particle_selection_m(selection, setup)
+    return 0.5*m.*dot.(v, v)
+end
+
+
 struct SingleParticleTotalEnergy <: AbstractScalarObservable
     trap :: Symbol
     particle_collection :: Symbol

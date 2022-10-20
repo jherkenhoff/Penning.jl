@@ -5,16 +5,16 @@ const c₂ = -14960.0
 const B₀ = 1.0
 
 trap = Trap(
-    fields = (
+    fields = [
         IdealTrapField(U₀, c₂, B₀),
-    ),
+    ],
     particles = (
         ion₁ = ParticleCollection(Ion(187, 30), [[50e-6, 0, 50e-6]], [[100, 0, 0]]),
         ion₂ = ParticleCollection(Ion(187, 30), [[-50e-6, 0, -50e-6]], [[-100, 0, 0]]),
     ),
-    interactions = (
+    interactions = [
         CoulombInteraction(),
-    )
+    ]
 )
 
 setup = Setup(

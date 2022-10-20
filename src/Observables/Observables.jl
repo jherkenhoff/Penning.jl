@@ -9,6 +9,7 @@ export
     AbstractVectorObservable,
     PositionObservable,
     VelocityObservable,
+    KineticEnergyObservable,
     EFieldObservable,
     BFieldObservable,
     ElectrodeVoltageObservable,

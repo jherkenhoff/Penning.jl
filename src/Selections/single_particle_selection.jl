@@ -1,6 +1,6 @@
 using Penning.Setups
 
-struct SingleParticleSelection{T, PC} <: AbstractParticleSelection
+struct SingleParticleSelection{T, PC} <: AbstractSingleParticleSelection
     trap :: T
     particle_collection :: PC
     particle_index :: Integer

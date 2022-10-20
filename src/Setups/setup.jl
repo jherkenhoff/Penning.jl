@@ -7,16 +7,15 @@ import Penning.Common
 struct Setup{T, CIR, CON}
     traps :: T
     circuits :: CIR
-    connections :: CON
+    circuit_connections :: CON
     clock :: Clock
 end
 
-function Setup(; traps, circuits=(;), connections=(;))
+function Setup(; traps, circuits=(;), circuit_connections=(;))
     clock = Clock()
     # TODO: Check that an electrode is only connected to at most one circuit
-    return Setup(traps, circuits, connections, clock)
+    return Setup(traps, circuits, circuit_connections, clock)
 end
-
 
 function Common.reset!(setup::Setup)
     reset!(setup.clock)

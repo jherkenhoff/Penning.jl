@@ -6,7 +6,7 @@ using Penning.Fields
 using Penning.Interactions
 using Penning.Electrodes
 using Penning.Circuits
-using Penning.OutputWriters
+using Penning.CircuitConnections
 
 function run!(sim::Simulation; pickup::Bool=false,
               run_until_time = Inf,
@@ -163,13 +163,8 @@ function handle_external_circuit!(setup::Setup, dt::Float64)
         end
     end
 
-    for circuit in values(setup.circuits)
-        circuit.i .= 0.0 
-    end
-
-    for connection in values(setup.connections)
-        i = setup.traps[connection.trap].electrodes[connection.electrode].i
-        setup.circuits[connection.circuit].i[connection.pin] += i
+    for connection in values(setup.circuit_connections)
+        connect_electrodes_to_circuit!(connection, setup)
     end
 
     # Time step circuits
@@ -177,9 +172,8 @@ function handle_external_circuit!(setup::Setup, dt::Float64)
         step_circuit!(circuit, dt)
     end
 
-    for connection in values(setup.connections)
-        u = setup.circuits[connection.circuit].u[connection.pin]
-        setup.traps[connection.trap].electrodes[connection.electrode].u = u
+    for connection in values(setup.circuit_connections)
+        connect_circuit_to_electrodes!(connection, setup)
     end
 
     for trap in values(setup.traps)

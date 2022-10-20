@@ -1,6 +1,6 @@
 using Penning.Setups
 
-struct MultiParticleSelection <: AbstractParticleSelection
+struct MultiParticleSelection <: AbstractMultiParticleSelection
     vec :: Vector{SingleParticleSelection}
 end
 
