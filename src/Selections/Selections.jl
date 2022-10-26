@@ -3,14 +3,11 @@ module Selections
 export
     AbstractSelection,
     AbstractParticleSelection,
-    AbstractSingleParticleSelection,
-    AbstractMultiParticleSelection,
     AbstractElectrodeSelection,
     AbstractCircuitPinSelection
 
 export
-    SingleParticleSelection,
-    MultiParticleSelection,
+    ParticleSelection,
     AllParticleSelection,
     ElectrodeSelection,
     CircuitPinSelection
@@ -33,13 +30,11 @@ export
 
 abstract type AbstractSelection end
 abstract type AbstractParticleSelection <: AbstractSelection end
-abstract type AbstractSingleParticleSelection <: AbstractParticleSelection end
-abstract type AbstractMultiParticleSelection <: AbstractParticleSelection end
 abstract type AbstractElectrodeSelection <: AbstractSelection end
 abstract type AbstractCircuitPinSelection <: AbstractSelection end
 
-include("single_particle_selection.jl")
-include("multi_particle_selection.jl")
+include("particle_selection.jl")
+#include("multi_particle_selection.jl")
 include("electrode_selection.jl")
 include("circuit_pin_selection.jl")
 

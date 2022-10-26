@@ -1,6 +1,6 @@
 using Penning
 
-const N = 1000
+const N = 300
 const SIM_TIME = 0.001
 const OVERSAMPLING = 20
 
@@ -17,7 +17,7 @@ trap = Trap(
         IdealTrapField(U₀, c₂, B₀),
     ),
     particles = (
-        ParticleCollection(Re, spherical_homogeneous_positions(N, 6e-4), boltzman_velocities(N, 2000.2)),
+        ParticleCollection(Re, spherical_homogeneous_positions(N, 10e-4), boltzman_velocities(N, 2000.2)),
     ),
     interactions = (
         CoulombInteraction(),
@@ -51,7 +51,8 @@ sim = Simulation(
             observables = (
                 V = VelocityObservable(),
                 E = EFieldObservable(),
-                KE = KineticEnergyObservable()
+                KE = KineticEnergyObservable(),
+                V_mag = VectorNormObservable(VelocityObservable())
             )
         ),
     )

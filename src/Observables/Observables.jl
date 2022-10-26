@@ -15,7 +15,8 @@ export
     ElectrodeVoltageObservable,
     ElectrodeCurrentObservable,
     SingleParticleTotalEnergy,
-    VectorComponentObservable
+    VectorComponentObservable,
+    VectorNormObservable
 
 export
     observe
@@ -28,13 +29,25 @@ abstract type AbstractVectorObservable <: AbstractObservable end
 abstract type AbstractSingleParticleScalarObservable <: AbstractScalarObservable end
 abstract type AbstractSingleParticleVectorObservable <: AbstractVectorObservable end
 
-abstract type AbstractCollectiveParticleScalarObservable <: AbstractScalarObservable end
-abstract type AbstractCollectiveParticleVectorObservable <: AbstractVectorObservable end
+abstract type AbstractMultiParticleScalarObservable <: AbstractScalarObservable end
+abstract type AbstractMultiParticleVectorObservable <: AbstractVectorObservable end
+
+"""
+    observe(obs, selection, setup)
+
+Returns the value of an observable `obs` of a given `selection`.
+
+The returned type depends on the specific observable.
+"""
+function observe(obs::AbstractObservable, selection::AbstractSelection, setup::Setup)
+    error("Function `observe` is not implemented for observable $(typeof(obs)) and selection $(typeof(selection)).")
+end
 
 include("kinetic.jl")
 include("energetic.jl")
 include("electrode.jl")
 include("field.jl")
-include("vector_component_observable.jl")
+include("higher_order_observables/vector_norm_observable.jl")
+include("higher_order_observables/vector_component_observable.jl")
 
 end # module

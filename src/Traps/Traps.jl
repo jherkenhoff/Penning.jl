@@ -9,6 +9,11 @@ struct Trap{F, P, I, E}
     electrodes :: E
 end
 
+"""
+    Trap(fields=(;), particles=(;), interactions=(;), electrodes=(;))
+
+
+"""
 function Trap(;fields=(;), particles=(;), interactions=(;), electrodes=(;))
     return Trap(fields, particles, interactions, electrodes)
 end

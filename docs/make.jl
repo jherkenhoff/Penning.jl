@@ -41,6 +41,7 @@ pages = [
     ],
     "Setting up the simulation" => [
         "Overview" => "simulation_setup/overview.md",
+        "Setup" => "simulation_setup/setup.md",
         "Traps" => "simulation_setup/traps.md",
         "Fields" => "simulation_setup/fields.md",
         "Particles" => "simulation_setup/particles.md",

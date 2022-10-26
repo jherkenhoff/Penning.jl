@@ -1,3 +1,4 @@
+
 function vector_component_symbol_to_int(component::Symbol)
     if component == :x
         return 1
@@ -9,7 +10,6 @@ function vector_component_symbol_to_int(component::Symbol)
         throw(ArgumentError("Symbol \"$(component)\" is not a valid vector-component designator. Valid symbols are :x, :y, and :z."))
     end
 end
-
 
 
 """
@@ -25,7 +25,7 @@ using the following code:
 my_observable = VectorComponentObservable(PositionObservable(), :x)
 ```
 """
-struct VectorComponentObservable{O<:AbstractVectorObservable} <: AbstractScalarObservable
+struct VectorComponentObservable{O<:AbstractVectorObservable} <: AbstractSingleParticleScalarObservable
     child_observable :: O
     component :: Integer
 end
@@ -35,13 +35,7 @@ function VectorComponentObservable(child_observable::AbstractVectorObservable, c
     return VectorComponentObservable(child_observable, i)
 end
 
-function observe(observable::VectorComponentObservable, selection::AbstractSingleParticleSelection, setup::Setup)
+function observe(observable::VectorComponentObservable, selection::AbstractParticleSelection, setup::Setup)
     vec = observe(observable.child_observable, selection, setup)
     return vec[observable.component]
 end
-
-function observe(observable::VectorComponentObservable, selection::AbstractMultiParticleSelection, setup::Setup)
-    vec = observe(observable.child_observable, selection, setup)
-    return getindex.(vec, observable.component)
-end
-

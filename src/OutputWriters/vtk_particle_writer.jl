@@ -8,7 +8,7 @@ using Penning.Traps
 using Penning.Observables
 using Penning.Selections
 
-struct VtkParticleWriter{SEL<:AbstractParticleSelection, O, P, SCH<:AbstractSchedule} <: AbstractOutputWriter
+struct VtkParticleWriter{SEL, O, P, SCH<:AbstractSchedule} <: AbstractOutputWriter
     selection::SEL
     observables :: O
     pvd :: P
@@ -16,21 +16,25 @@ struct VtkParticleWriter{SEL<:AbstractParticleSelection, O, P, SCH<:AbstractSche
     schedule::SCH
 end
 
-function VtkParticleWriter(filepath::String, selection::AbstractParticleSelection, schedule::AbstractSchedule; observables=(;))
+function VtkParticleWriter(filepath::String, selection::AbstractVector{<:AbstractParticleSelection}, schedule::AbstractSchedule; observables=(;))
     pvd = paraview_collection(filepath)
     return VtkParticleWriter(selection, observables, pvd, filepath, schedule)
+end
+
+function VtkParticleWriter(filepath::String, selection::AbstractParticleSelection, schedule::AbstractSchedule; observables=(;))
+    return VtkParticleWriter(filepath, [selection], observables, filepath, schedule)
 end
 
 function write_output(writer::VtkParticleWriter, setup::Setup)
     filename = "$(writer.filepath)_$(setup.clock.iteration)"
 
-    r = get_particle_selection_r(writer.selection, setup)
+    r = get_particle_selection_r.(writer.selection, (setup,))
 
     cells = [MeshCell(VTKCellTypes.VTK_VERTEX, (i, )) for i = 1:length(r)]
 
     vtk_grid(filename, reduce(hcat, r), cells, compress=false) do vtk
         for (key, observable) in pairs(writer.observables)
-            obs = observe(observable, writer.selection, setup)
+            obs = observe.((observable,), writer.selection, (setup,))
             vtk[String(key)] = reduce(hcat, obs)
         end
         #vtk["PE_TRAP"] = reduce(hcat, PE)/e

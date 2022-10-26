@@ -99,12 +99,12 @@ setup = Setup(
 # is to be saved. In this case, we want to store data at every simulation iteration.
 
 sim = Simulation(
-    setup, 
+    setup,
     dt=20e-9,
     output_writers = (
         MemoryWriter(
             PositionObservable(),
-            SingleParticleSelection(trap=1, particle_collection=1, particle_index=1),
+            ParticleSelection(trap=1, particle_collection=1, particle_index=1),
             IterationInterval(1)
         ),
     )

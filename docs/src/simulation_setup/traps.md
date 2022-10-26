@@ -1,2 +1,5 @@
 # Traps
 
+``` @docs
+Trap
+```

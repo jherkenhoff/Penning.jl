@@ -12,7 +12,6 @@ function observe(observable::KineticEnergyObservable, selection::AbstractParticl
     return 0.5*m.*dot.(v, v)
 end
 
-
 struct SingleParticleTotalEnergy <: AbstractScalarObservable
     trap :: Symbol
     particle_collection :: Symbol
