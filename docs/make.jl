@@ -5,10 +5,10 @@ using Documenter
 using DocumenterCitations
 using Literate
 
-const EXAMPLES_DIR = joinpath(@__DIR__, "..", "examples")
+const EXAMPLES_DIR          = joinpath(@__DIR__, "..", "examples")
 const EXAMPLES_OUTPUT_DIR   = joinpath(@__DIR__, "src/generated/examples")
-const VALIDATION_DIR = joinpath(@__DIR__, "..", "studies/validation")
-const VALIDATION_OUTPUT_DIR   = joinpath(@__DIR__, "src/generated/validation")
+const VALIDATION_DIR        = joinpath(@__DIR__, "..", "studies/validation")
+const VALIDATION_OUTPUT_DIR = joinpath(@__DIR__, "src/generated/validation")
 
 examples = [
     "basic_eigenmotion.jl",
@@ -68,7 +68,7 @@ pages = [
     "Validation studies" => [
         "Ion detection" => [
             "Noiseless Resistor" => "generated/validation/resistor_noiseless.md",
-        ]
+        ],
     ],
 ]
 
