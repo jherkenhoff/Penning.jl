@@ -49,22 +49,22 @@ const B₀ = 1.0
 # For more complex simulations, this is the place where you would also add 
 # for example excitation fields or field imperfections.
 #
-# Since an empty trap would be quite boring, we have to specify the particle species and 
-# initial positions and velocities of all particles contained in the simulation.
-# `Penning.jl` groups particles of same particle species into [`ParticleCollection`](@ref)s, which
+# Since an empty trap would be quite boring, we have to specify the particles that should 
+# take part in the simulation.
+# `Penning.jl` groups particles of the same particle species into [`ParticleCollection`](@ref)s, which
 # is a concept that becomes important if you want to specify and control inter-particle interactions.
 # But since we only want to simulate a single ion we only need a single particle collection.
 # In this example, we are using an ion with mass 187 u (atomic mass unit) and charge state
-# 30 (in elementary charge unit).
-# The initial position and velocity have to be specified in meters and meters per second.
+# +30 (in elementary charge unit).
+# The initial position and velocity have to be specified in meters and meters per second, respectively.
 
 trap = Trap(
-    fields = (
-        IdealTrapField(U₀, c₂, B₀),
-    ),
-    particles = (
-        ParticleCollection(Ion(187, 30), [[50e-6, 0, 50e-6]], [[100, 0, 0]]),
-    )
+    fields = [
+        IdealTrapField(U₀, c₂, B₀)
+    ],
+    particles = [
+        ParticleCollection(Ion(187, 30), [[50e-6, 0, 50e-6]], [[100, 0, 0]])
+    ]
 )
 
 # ## Instantiate setup
@@ -76,9 +76,7 @@ trap = Trap(
 # add multiple traps, add electrical circuits and specify their connections.
 
 setup = Setup(
-    traps = (
-        trap,
-    )
+    traps = [trap]
 )
 
 # ## Instantiate simulation object
@@ -101,20 +99,29 @@ setup = Setup(
 sim = Simulation(
     setup,
     dt=20e-9,
-    output_writers = (
+    output_writers = [
         MemoryWriter(
             PositionObservable(),
             ParticleSelection(trap=1, particle_collection=1, particle_index=1),
             IterationInterval(1)
-        ),
-    )
+        )
+    ]
 )
 
 # ## Run simulation
 #
 # Its finally time to run the simulation!
 # Just specify how long you want to simulate and lean back (but not for too long - `Penning.jl` is fast 😉).
-# Take a look at the documentation of [`run!`](@ref) for further stop conditions.
+# This particular simulation will probably finish in way under one second. Note that
+# Julia is a just in time (JIT) compiled language, and might take a while to initially
+# compile the code before actually running it. For further information on how Julia
+# executes code, you might want to take a look [here](https://docs.julialang.org/en/v1/devdocs/eval/).
+#
+# The following [`run!`](@ref) command runs the simulation until the time
+# of 10 µs is reached. Note that this is the time **within your simulation** and 
+# not the "real-life time" (also called [wall-time](https://en.wikipedia.org/wiki/Elapsed_real_time)) 
+# that it takes your computer to run.
+# Take a look at the documentation of [`run!`](@ref) for further information on stop conditions.
 
 run!(sim, run_until_time=10e-6)
 
@@ -129,13 +136,13 @@ x = getindex.(r, 1)
 y = getindex.(r, 2)
 z = getindex.(r, 3)
 
-plot(t*1e6, z*1e6)
+plot(t*1e6, z*1e6, legend=false)
 xlabel!("\$t\$ / ms")
 ylabel!("Axial position / µm")
 savefig(joinpath(@__DIR__, "img/basic_eigenmotion_z.png"))
 
 
-plot(t*1e6, x*1e6)
+plot(t*1e6, x*1e6, legend=false)
 xlabel!("\$t\$ / ms")
 ylabel!("X position / µm")
 savefig(joinpath(@__DIR__, "img/basic_eigenmotion_x.png"))
