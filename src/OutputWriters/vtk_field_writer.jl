@@ -21,8 +21,7 @@ function VtkFieldWriter(filepath::String, trap, field, points::Array{Float64, 4}
     return VtkFieldWriter(filepath, trap, field, points, schedule, pvd)
 end
 
-
-function (writer::VtkFieldWriter)(setup::Setup)
+function write_output(writer::VtkFieldWriter, setup::Setup)
     filename = "$(writer.filepath)_$(setup.clock.iteration)"
 
     t = setup.clock.time
@@ -40,10 +39,10 @@ function (writer::VtkFieldWriter)(setup::Setup)
     end
 end
 
-function checkpoint!(writer::VtkFieldWriter)
+function Common.checkpoint!(writer::VtkFieldWriter)
     vtk_save(writer.pvd)
 end
 
-function finalize!(writer::VtkFieldWriter)
+function Common.finalize!(writer::VtkFieldWriter)
     vtk_save(writer.pvd)
 end

@@ -26,7 +26,9 @@ export
     get_circuit_pin_selection_voltage,
     get_circuit_pin_selection_current,
     set_circuit_pin_selection_voltage!,
-    set_circuit_pin_selection_current!
+    set_circuit_pin_selection_current!,
+    add_circuit_pin_selection_voltage!,
+    add_circuit_pin_selection_current!
 
 abstract type AbstractSelection end
 abstract type AbstractParticleSelection <: AbstractSelection end

@@ -17,13 +17,13 @@ into memory (ram) at time intervals specified by `schedule`.
 Each time data is saved, the current simulation time is saved alongside with the data.
 """
 
-function MemoryWriter(observable::AbstractScalarObservable, selection::AbstractParticleSelection, schedule::AbstractSchedule)
+function MemoryWriter(observable::AbstractScalarObservable, selection::AbstractSelection, schedule::AbstractSchedule)
     t = Vector{Float64}()
     mem = Vector{Float64}()
     return MemoryWriter(observable, selection, t, mem, schedule)
 end
 
-function MemoryWriter(observable::AbstractVectorObservable, selection::AbstractParticleSelection, schedule::AbstractSchedule)
+function MemoryWriter(observable::AbstractVectorObservable, selection::AbstractSelection, schedule::AbstractSchedule)
     t = Vector{Float64}()
     mem = Vector{Vector{Float64}}()
     return MemoryWriter(observable, selection, t, mem, schedule)

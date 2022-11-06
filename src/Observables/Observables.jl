@@ -14,6 +14,8 @@ export
     BFieldObservable,
     ElectrodeVoltageObservable,
     ElectrodeCurrentObservable,
+    CircuitPinVoltageObservable,
+    CircuitPinCurrentObservable,
     SingleParticleTotalEnergy,
     VectorComponentObservable,
     VectorNormObservable
@@ -46,6 +48,7 @@ end
 include("kinetic.jl")
 include("energetic.jl")
 include("electrode.jl")
+include("circuit.jl")
 include("field.jl")
 include("higher_order_observables/vector_norm_observable.jl")
 include("higher_order_observables/vector_component_observable.jl")

@@ -163,8 +163,13 @@ function handle_external_circuit!(setup::Setup, dt::Float64)
         end
     end
 
+    # Reset circuit input currents to zero
+    for circuit in values(setup.circuits)
+        reset_circuit_input_current!(circuit)
+    end
+
     for connection in values(setup.circuit_connections)
-        connect_electrodes_to_circuit!(connection, setup)
+        connect_electrode_to_circuit!(connection, setup)
     end
 
     # Time step circuits
@@ -173,7 +178,7 @@ function handle_external_circuit!(setup::Setup, dt::Float64)
     end
 
     for connection in values(setup.circuit_connections)
-        connect_circuit_to_electrodes!(connection, setup)
+        connect_circuit_to_electrode!(connection, setup)
     end
 
     for trap in values(setup.traps)

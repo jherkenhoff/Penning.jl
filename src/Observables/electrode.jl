@@ -3,20 +3,26 @@ using Penning.Electrodes
 using Penning.Circuits
 using Penning.Selections
 
+"""
+    ElectrodeVoltageObservable()
+Defines an observable that returns the voltage (in volts) of an electrode.
+"""
 struct ElectrodeVoltageObservable <: AbstractScalarObservable
-    electrode_seleciton :: AbstractElectrodeSelection
 end
 
-function (obs::ElectrodeVoltageObservable)(setup::Setup)
-    return get_electrode_selection_voltage(obs.electrode_seleciton, setup)
+function observe(observable::ElectrodeVoltageObservable, selection::AbstractElectrodeSelection, setup::Setup)
+    return get_electrode_selection_voltage(selection, setup)
 end
 
 
+
+"""
+    ElectrodeCurrentObservable()
+Defines an observable that returns the current (in amperes) of an electrode.
+"""
 struct ElectrodeCurrentObservable <: AbstractScalarObservable
-    trap :: Symbol
-    electrode :: Symbol
 end
 
-function (obs::ElectrodeCurrentObservable)(setup::Setup)
-    return setup.traps[obs.trap].electrodes[obs.trap].i
+function observe(observable::ElectrodeCurrentObservable, selection::AbstractElectrodeSelection, setup::Setup)
+    return get_electrode_selection_current(selection, setup)
 end
