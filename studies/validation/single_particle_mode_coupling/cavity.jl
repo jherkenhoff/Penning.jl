@@ -1,37 +1,70 @@
 using Penning
-using Penning.Utils.Bessel
 using Plots
 
 const OVERSAMPLING = 20
-const N_AXIAL_CYCLES = 30
-const E_0 = 300
+const N_AXIAL_CYCLES = 200
 
+const E₀ = 3000.0
 const m = 1
-const n = 4
-const p = 4
-const z_0 = 3.3045e-3
-const rho_0 = 3.25e-3
+const n = 2
+const p = 2
+const z₀ = 10e-3
+const ρ₀ = 11e-3
 
-species = Electron()
+const U₀ = 50.0
+const c₂ = -15000.0
+const B₀ = 1.0
 
-trap = IdealTrap(5.0, -14960.0, 7.0)
-trap.particles[:electrons] = ParticleCollection(species, SingleParticleDistribution([0,0,0], [10000,0,0]))
-trap.excitations[:cavity] = TECavityExcitation(m, n, p, z_0, rho_0, E_0=200/(p*pi*rho_0/2/z_0/besseljp_zero(m, n))^2)
+particle = Electron()
 
-setup = Setup()
-setup.traps[:electron_trap] = trap
+omega_c, omega_p, omega_m, omega_z = calc_eigenfrequencies(U₀, c₂, B₀, particle.q, particle.m)
 
-sim = Simulation(setup, dt=2*pi/calc_omega_c(trap, species)/OVERSAMPLING, stop_time=N_AXIAL_CYCLES*2*pi/calc_omega_z(trap, species))
+trap = Trap(
+    fields = (
+        IdealTrapField(U₀, c₂, B₀),
+        TECavityExcitationField(m, n, p, z₀, ρ₀, E₀=E₀)
+    ),
+    particles = (
+        ParticleCollection(particle, [[0, 0, 40e-6]], [[0, 0, 0]]),
+    )
+)
 
-sim.output_writers[:memory_position] = MemoryWriter(PositionComponentObservable(:electron_trap, :electrons, 1, 3), IterationInterval(600))
-
-run!(sim)
-
-t = sim.output_writers[:memory_position].t
-z = sim.output_writers[:memory_position].mem
-plot(t, z, labels="Simulated Z position", plot_title="Cavity")
-
-savefig(joinpath(@__DIR__, "cavity.png"))
-
+trap.fields[2].ω = omega_z
 
 
+setup = Setup(
+    traps = (trap, )
+)
+
+sim = Simulation(
+    setup,
+    dt=2*pi/omega_p/OVERSAMPLING,
+    output_writers = [
+        MemoryWriter(
+            PositionObservable(),
+            ParticleSelection(trap=1, particle_collection=1, particle_index=1),
+            IterationInterval(4)
+        )
+    ]
+)
+
+run!(sim, run_until_time=2*pi/omega_z*N_AXIAL_CYCLES)
+
+# Theoretical Rabi frequency: (http://hdl.handle.net/21.11116/0000-0005-6361-E)(Page 25, equation 2.46)
+# Omega_R = A_rf/4*abs(ion.q) / ion.m /sqrt(omega_z*(omega_p-omega_m))
+# T_exchange = 2*pi/Omega_R/4
+# println("Theoretical exchange period: $T_exchange s")
+
+t = sim.output_writers[1].t
+r = sim.output_writers[1].mem
+
+x = getindex.(r, 1)
+y = getindex.(r, 2)
+z = getindex.(r, 3)
+
+plot(t*1e6, z*1e6, labels="Simulated Z position")
+#vline!([T_exchange*1e6], labels="Theoretical pi pulse duration")
+xlabel!("Time / µs")
+ylabel!("Axial amplitude / µm", plot_title="Cavity sideband coupling")
+
+#savefig(joinpath(@__DIR__, "plane_wave.png"))
