@@ -1,3 +1,4 @@
+
 using Penning.ParticlePushers
 using Penning.Particles
 using Penning.Setups
@@ -8,71 +9,37 @@ using Penning.Electrodes
 using Penning.Circuits
 using Penning.CircuitConnections
 
-function run!(sim::Simulation; pickup::Bool=false,
-              run_until_time = Inf,
-              run_until_iteration = Inf,
-              run_for_time = Inf,
-              run_for_iterations = Inf,
-              run_for_wall_time = Inf,
-              run_until_wall_time = Inf)
+import Penning.Common
 
-    @info "Starting simulation at iteration $(Int(sim.setup.clock.iteration)) and time $(prettytime(sim.setup.clock.time))"
+function run!(sim::Simulation, stop_condition::AbstractStopCondition)
+    @info "Starting simulation at simulation time $(prettytime(sim.setup.clock.time)) and iteration $(Int(sim.setup.clock.iteration))"
 
-    if run_until_time == Inf && run_until_iteration == Inf && 
-       run_for_time == Inf && run_for_iterations == Inf && 
-       run_for_wall_time == Inf && run_until_wall_time == Inf
-        @warn "This simulation will run forever as no time, iteration or wall time limit was specified"
-    end
-
-    start_iteration = sim.setup.clock.iteration
-    start_time = sim.setup.clock.time
-
-    start_wall_time = time_ns()
-    last_step_wall_time = start_wall_time
+    run_start_wall_time_ns = time_ns()
     while true
-        step_start_wall_time = last_step_wall_time
-
         time_step!(sim)
 
-        if sim.setup.clock.iteration >= run_until_iteration
-            @info "Simulation is stopping. Iteration $(sim.setup.clock.iteration) " *
-                "has hit or exceeded simulation stop iteration $(Int(run_until_iteration)) at simulation time $(prettytime(sim.setup.clock.time))."
-            break
+        # Callbacks, diagnostics and writers
+        for diag in values(sim.diagnostics)
+            diag.schedule(sim.setup) && diag(sim.setup)
+        end
+        for writer in values(sim.output_writers)
+            writer.schedule(sim.setup) && write_output(writer, sim.setup)
+        end
+        for callback in values(sim.callbacks)
+            callback.schedule(sim.setup) && callback(sim)
         end
 
-        if sim.setup.clock.time >= run_until_time
-            @info "Simulation is stopping. Time $(prettytime(sim.setup.clock.time)) " *
-                    "has hit or exceeded simulation stop time $(prettytime(run_until_time)) at iteration $(Int(sim.setup.clock.iteration))."
-            break
-        end
+        # Check if simulation should stop
+        sim.wall_time_ns = (time_ns() - run_start_wall_time_ns)
 
-        if sim.setup.clock.iteration - start_iteration >= run_for_iterations
-            @info "Simulation is stopping. Simulation advanced by at least $(Int(run_for_iterations)) iterations from iteration $(Int(start_iteration)) " *
-                    "to $(Int(sim.setup.clock.iteration)) at simulation time $(prettytime(sim.setup.clock.time))."
-            break
-        end
-
-        if sim.setup.clock.time - start_time >= run_for_time
-            @info "Simulation is stopping. Simulation advanced by a durtion of at least $(prettytime(run_for_time)) from $(prettytime(start_time)) " *
-                    "to $(prettytime(sim.setup.clock.time)) at iteration $(Int(sim.setup.clock.iteration))."
-            break
-        end
-
-        last_step_wall_time = time_ns()
-        sim.wall_time += 1e-9*(last_step_wall_time - step_start_wall_time)
-        if sim.wall_time >= run_until_wall_time
-            @info "Simulation is stopping. Simulation run time $(sim.wall_time) " *
-                "has hit or exceeded simulation total wall time limit $(prettytime(run_until_wall_time))."
-            break
-        end
-
-        if sim.wall_time - start_wall_time >= run_for_wall_time
-            @info "Simulation is stopping. Simulation did run for at least $(run_for_wall_time)."
+        should_stop, stop_reason = stop_condition(sim)
+        if should_stop
+            @info "Simulation stopping: " * stop_reason
             break
         end
     end
 
-    checkpoint!(sim)
+    Common.checkpoint!(sim)
 
     nothing
 end
@@ -94,18 +61,6 @@ function time_step!(sim::Simulation)
             handle_external_circuit!(sim.setup, sim.dt)
         end
         push_particles!(sim.particle_pusher, sim.setup, sim.dt)
-    end
-
-    # Callbacks, diagnostics and writers
-
-    for diag in values(sim.diagnostics)
-        diag.schedule(sim.setup) && diag(sim.setup)
-    end
-    for writer in values(sim.output_writers)
-        writer.schedule(sim.setup) && write_output(writer, sim.setup)
-    end
-    for callback in values(sim.callbacks)
-        callback.schedule(sim.setup) && callback(sim)
     end
 
     tick!(sim.setup.clock, sim.dt)

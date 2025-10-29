@@ -12,7 +12,7 @@ Clock(; time=0.0, iteration=0) = Clock(time, iteration)
 
 Base.summary(clock::Clock) = string("Clock(time=$(prettytime(clock.time)), iteration=$(clock.iteration))")
 
-Base.show(io::IO, c::Clock) where T =
+Base.show(io::IO, c::Clock) =
     println(io, "Clock: time = $(prettytime(c.time)), iteration = $(c.iteration)")
 
 next_time(clock, dt) = clock.time + dt

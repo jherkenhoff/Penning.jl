@@ -1,8 +1,8 @@
 module Penning
 
 export
-    AlignedTimeInterval, 
-    AndSchedule, 
+    AlignedTimeInterval,
+    AndSchedule,
     AxialParallelPlateElectrode,
     BorisPusher,
     calc_eigenfrequencies,
@@ -48,6 +48,7 @@ export
     ProgressDiagnostic,
     QuadrupolarExcitationField,
     RadialParallelPlateElectrode,
+    init!,
     reset!,
     run!,
     set_electrode_voltage!,
@@ -58,20 +59,21 @@ export
     VectorComponentObservable,
     VectorNormObservable,
     Species,
-    SpecifiedTimes, 
+    SpecifiedTimes,
     Circuit,
     Resistor,
     Resonator,
     Capacitor,
     TECavityExcitationField,
-    TimeInterval, 
+    TimeInterval,
     TMCavityExcitationField,
     Trap,
     VelocityObservable,
     VolumeExtractor,
     VtkFieldWriter,
     VtkParticleWriter,
-    WallTimeInterval, 
+    WallTimeInterval,
+    WallTimeStopCondition,
     XParallelPlateElectrode,
     YParallelPlateElectrode,
     spherical_homogeneous_positions,
@@ -84,11 +86,13 @@ export
     LinearDriftParameter,
     GaussianNoiseParameter,
     boltzman_velocities,
+    zero_velocities,
+    rotating_spheroid_velocities,
     find_eigenfreqs,
     AllParticleSelection
 
-include("Common.jl")
 include("Constants.jl")
+include("Common.jl")
 include("Utils/Utils.jl")
 include("Particles/Particles.jl")
 include("Interactions/Interactions.jl")
@@ -107,8 +111,8 @@ include("OutputWriters/OutputWriters.jl")
 include("Simulations/Simulations.jl")
 include("Procedures/Procedures.jl")
 
-using .Common
 using .Utils
+using .Common
 using .Particles
 using .Traps
 using .Circuits
@@ -124,5 +128,6 @@ using .Diagnostics
 using .OutputWriters
 using .Simulations
 using .Procedures
+
 
 end
