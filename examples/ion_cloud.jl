@@ -1,16 +1,20 @@
 using Penning
 
-const U₀ = -50.0
+const N = 10
+
+const U₀ = 8.0
 const c₂ = -14960.0
 const B₀ = 1.0
+
+r₀ = spherical_homogeneous_positions(N, 100e-6, 30e-6)
+v₀ = rotating_spheroid_velocities(r₀, [0, 0, -2*π*100e3], [0, 0, 0])
 
 trap = Trap(
     fields = [
         IdealTrapField(U₀, c₂, B₀),
     ],
     particles = (
-        ion₁ = ParticleCollection(Ion(187, 30), [[50e-6, 0, 50e-6]], [[100, 0, 0]]),
-        ion₂ = ParticleCollection(Ion(187, 30), [[-50e-6, 0, -50e-6]], [[-100, 0, 0]]),
+        ParticleCollection(Electron(), r₀, v₀), # Ion(187, 30)
     ),
     interactions = [
         CoulombInteraction(),
@@ -25,13 +29,13 @@ setup = Setup(
 
 sim = Simulation(
     setup,
-    dt=20e-9,
+    dt=2e-10,
     particle_pusher = BorisPusher(),
     output_writers = (
         VtkParticleWriter(
-            "studies/output/particles",
+            "examples/output/particles",
             AllParticleSelection(setup),
-            IterationInterval(1),
+            IterationInterval(1000),
             observables = (
                 V = VelocityObservable(),
                 E = EFieldObservable()
@@ -40,6 +44,6 @@ sim = Simulation(
     )
 )
 
-run!(sim, run_until_time=10e-6)
+run!(sim, WallTimeStopCondition(20))
 
 finalize!(sim)

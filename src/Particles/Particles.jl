@@ -4,7 +4,9 @@ export Species, Electron, Ion
 export ParticleCollection, N_particles, force_particle_distribution!
 export spherical_homogeneous_positions,
     cubic_homogeneous_positions,
-    boltzman_velocities
+    boltzman_velocities,
+    zero_velocities,
+    rotating_spheroid_velocities
 
 include("species.jl")
 include("initial_positions.jl")

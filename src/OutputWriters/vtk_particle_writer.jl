@@ -8,6 +8,8 @@ using Penning.Traps
 using Penning.Observables
 using Penning.Selections
 
+import Penning.Common
+
 struct VtkParticleWriter{SEL, O, P, SCH<:AbstractSchedule} <: AbstractOutputWriter
     selection::SEL
     observables :: O
