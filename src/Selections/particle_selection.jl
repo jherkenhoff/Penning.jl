@@ -1,8 +1,8 @@
 using Penning.Setups
 
-struct ParticleSelection{T, PC} <: AbstractParticleSelection
+struct ParticleSelection{T, PI} <: AbstractParticleSelection
     trap :: T
-    particle_index :: Integer
+    particle_index :: PI
 end
 
 function ParticleSelection(;trap, particle_index::Integer)
@@ -18,19 +18,19 @@ function get_particle_selection_m(s::ParticleSelection, setup::Setup)
 end
 
 function get_particle_selection_r(s::ParticleSelection, setup::Setup)
-    return setup.traps[s.trap].particles.r[s.particle_index]
+    return setup.traps[s.trap].particles.r[:, s.particle_index]
 end
 
 function get_particle_selection_v(s::ParticleSelection, setup::Setup)
-    return setup.traps[s.trap].particles.v[s.particle_index]
+    return setup.traps[s.trap].particles.v[:, s.particle_index]
 end
 
 function get_particle_selection_E(s::ParticleSelection, setup::Setup)
-    return setup.traps[s.trap].particles.E[s.particle_index]
+    return setup.traps[s.trap].particles.E[:, s.particle_index]
 end
 
 function get_particle_selection_B(s::ParticleSelection, setup::Setup)
-    return setup.traps[s.trap].particles.B[s.particle_index]
+    return setup.traps[s.trap].particles.B[:, s.particle_index]
 end
 
 function AllParticleSelection(setup::Setup)

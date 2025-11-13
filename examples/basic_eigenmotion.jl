@@ -24,6 +24,7 @@
 # [Plots](https://docs.juliaplots.org/latest/) package:
 
 using Penning
+using Penning.Constants
 using Plots
 
 # ## Define trap parameters
@@ -59,11 +60,9 @@ const B₀ = 1.0
 # The initial position and velocity have to be specified in meters and meters per second, respectively.
 
 trap = Trap(
+    particles = Particles(hcat([[50e-6, 0, 50e-6]]...), hcat([[100.0, 0.0, 0.0]]...), [30*q_e], [187*m_u]),
     fields = [
         IdealTrapField(U₀, c₂, B₀)
-    ],
-    particles = [
-        ParticleCollection(Ion(187, 30), [[50e-6, 0, 50e-6]], [[100, 0, 0]])
     ]
 )
 
@@ -102,7 +101,7 @@ sim = Simulation(
     output_writers = [
         MemoryWriter(
             PositionObservable(),
-            ParticleSelection(trap=1, particle_collection=1, particle_index=1),
+            ParticleSelection(trap=1, particle_index=1),
             IterationInterval(1)
         )
     ]
@@ -123,7 +122,7 @@ sim = Simulation(
 # that it takes your computer to run.
 # Take a look at the documentation of [`run!`](@ref) for further information on stop conditions.
 
-run!(sim, run_until_time=10e-6)
+run!(sim, SimTimeStopCondition(10e-6))
 
 # ## Retreive simulation data
 #

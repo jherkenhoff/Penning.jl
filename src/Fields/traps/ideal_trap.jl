@@ -57,7 +57,7 @@ function add_E_field!(field::IdealTrapField, E::AbstractVector{<:Number}, r::Abs
 end
 
 function calc_B_field(field::IdealTrapField, r::AbstractVector{<:Number}, t::Number)
-    return SVector{3, Float64}([0, 0, field.B₀])
+    return SVector{3, Float64}([0, 0, field.B₀(t)])
 end
 
 function set_B_field!(field::IdealTrapField, B::AbstractVector{<:Number}, r::AbstractVector{<:Number}, t::Number)

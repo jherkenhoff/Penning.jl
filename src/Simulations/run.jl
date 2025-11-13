@@ -28,12 +28,14 @@ function run!(sim::Simulation, stop_condition::AbstractStopCondition)
             callback.schedule(sim.setup) && callback(sim)
         end
 
-        # Check if simulation should stop
+        # Current wall time
         sim.wall_time_ns = (time_ns() - run_start_wall_time_ns)
 
+        # Check if simulation should stop
         should_stop, stop_reason = stop_condition(sim)
         if should_stop
             @info "Simulation stopping: " * stop_reason
+            @info "Simulation took $(prettytime(sim.wall_time_ns/1e9))"
             break
         end
     end
@@ -75,22 +77,12 @@ end
 end
 
 function update_trap_fields!(trap::Trap, t::Number)
-    # TODO: Refactor and make it less ugly
-    for i in eachindex(trap.particles.r)
-        if (length(trap.fields) == 0)
-            # If there are no fields, explicitly set the fields to zero
-            trap.particles.E[i] .= 0.0
-            trap.particles.B[i] .= 0.0
-        else
-            for (i_f, field) in enumerate(values(trap.fields))
-                if i_f == 1
-                    set_E_field!(field, trap.particles.E[i], trap.particles.r[i], t)
-                    set_B_field!(field, trap.particles.B[i], trap.particles.r[i], t)
-                else
-                    add_E_field!(field, trap.particles.E[i], trap.particles.r[i], t)
-                    add_B_field!(field, trap.particles.B[i], trap.particles.r[i], t)
-                end
-            end
+    trap.particles.E .= 0.0
+    trap.particles.B .= 0.0
+    for i in 1:N_particles(trap.particles)
+        for field in values(trap.fields)
+            trap.particles.E[:, i] += calc_E_field(field, view(trap.particles.r, :, i), t)
+            trap.particles.B[:, i] += calc_B_field(field, view(trap.particles.r, :, i), t)
         end
     end
     nothing
@@ -134,8 +126,10 @@ function handle_external_circuit!(setup::Setup, dt::Float64)
     end
 
     for trap in values(setup.traps)
-        for electrode in trap.electrodes
-            trap.particles.E .+= calc_electrode_backaction_field.( (electrode,), trap.particles.r)
+        for i in 1:N_particles(trap.particles)
+            for electrode in trap.electrodes
+                trap.particles.E[:, i] += calc_electrode_backaction_field(electrode, trap.particles.r[:, i])
+            end
         end
     end
 end

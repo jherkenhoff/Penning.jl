@@ -22,13 +22,12 @@ function initial_particle_push!(pusher::AbstractParticlePusher, setup::Setup, dt
 end
 
 function initial_particle_push!(pusher::AbstractParticlePusher, particles::Particles, dt)
-    for i in eachindex(particles.r)
+    for i in 1:N_particles(particles)
         initial_particle_push!(pusher,
-            particles.r[i],
-            particles.v[i],
-            particles.a[i],
-            particles.E[i],
-            particles.B[i],
+            view(particles.r, :, i),
+            view(particles.v, :, i),
+            view(particles.E, :, i),
+            view(particles.B, :, i),
             particles.q[i],
             particles.m[i],
             dt
@@ -43,13 +42,12 @@ function push_particles!(pusher::AbstractParticlePusher, setup::Setup, dt)
 end
 
 function push_particles!(pusher::AbstractParticlePusher, particles::Particles, dt)
-    for i in 1:N_particles(particle_collection)
+    for i in 1:N_particles(particles)
         push_particle!(pusher,
-            particles.r[i],
-            particles.v[i],
-            particles.a[i],
-            particles.E[i],
-            particles.B[i],
+            view(particles.r, :, i),
+            view(particles.v, :, i),
+            view(particles.E, :, i),
+            view(particles.B, :, i),
             particles.q[i],
             particles.m[i],
             dt

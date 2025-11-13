@@ -1,5 +1,5 @@
 
-struct Trap{F, P, I, E}
+struct Trap{F, I, E}
     particles::Particles
     fields :: F
     interactions :: I
@@ -9,6 +9,6 @@ end
 """
     Trap(particles; fields=(;), interactions=(;), electrodes=(;))
 """
-function Trap(particles::Particles; fields=(;), interactions=(;), electrodes=(;))
+function Trap(; particles::Particles, fields=(;), interactions=(;), electrodes=(;))
     return Trap(particles, fields, interactions, electrodes)
 end

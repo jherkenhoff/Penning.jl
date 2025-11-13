@@ -23,7 +23,7 @@ function update_velocity!(
     v2 = v1 + f1 * cross(v1, B)
     v3 = v1 + f2 * cross(v2, B)
 
-    v .= v3 + q / m * E * dt / 2
+    v[:] = v3 + q / m * E * dt / 2
 
     # Add damping:
     #v .+= -damping .* v / m * dt
@@ -59,5 +59,5 @@ function push_particle!(
     update_velocity!(pusher, v, E, B, q, m, dt)
 
     # Calc new position
-    r .+= v * dt
+    r[:] += v * dt
 end

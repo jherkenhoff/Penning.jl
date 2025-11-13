@@ -71,6 +71,7 @@ export
     VtkParticleWriter,
     WallTimeInterval,
     WallTimeStopCondition,
+    SimTimeStopCondition,
     XParallelPlateElectrode,
     YParallelPlateElectrode,
     spherical_homogeneous_positions,

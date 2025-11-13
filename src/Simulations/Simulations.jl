@@ -4,6 +4,7 @@ export
     Simulation,
     Callback,
     WallTimeStopCondition,
+    SimTimeStopCondition,
     run!
 
 include("callback.jl")
