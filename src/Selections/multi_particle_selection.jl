@@ -12,14 +12,11 @@ Base.iterate(s::MultiParticleSelection) = iterate(s.vec)
 Base.iterate(s::MultiParticleSelection, state) = iterate(s.vec, state)
 Base.length(s::MultiParticleSelection) = length(s.vec)
 
-
 function AllParticleSelection(setup::Setup)
     vec = []
     for (trap_index, trap) in pairs(setup.traps)
-        for (pc_index, pc) in pairs(trap.particles)
-            for p_index in keys(pc.r)
-                push!(vec, SingleParticleSelection(trap_index, pc_index, p_index))
-            end
+        for p_index in keys(trap.particles.r)
+            push!(vec, SingleParticleSelection(trap_index, p_index))
         end
     end
     return MultiParticleSelection(vec)

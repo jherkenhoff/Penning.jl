@@ -1,21 +1,18 @@
 module Traps
 
-export Trap
+export
+    Trap,
+    Particles,
+    update_trap_fields!,
+    spherical_homogeneous_positions,
+    cubic_homogeneous_positions,
+    boltzman_velocities,
+    zero_velocities,
+    rotating_spheroid_velocities
 
-struct Trap{F, P, I, E}
-    fields :: F
-    particles :: P
-    interactions :: I
-    electrodes :: E
-end
-
-"""
-    Trap(fields=(;), particles=(;), interactions=(;), electrodes=(;))
-
-
-"""
-function Trap(;fields=(;), particles=(;), interactions=(;), electrodes=(;))
-    return Trap(fields, particles, interactions, electrodes)
-end
+include("particles.jl")
+include("trap.jl")
+include("initial_positions.jl")
+include("initial_velocities.jl")
 
 end # module

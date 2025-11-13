@@ -1,5 +1,4 @@
 using Penning.Utils
-using Penning.Particles
 
 using LinearAlgebra: norm
 using StaticArrays

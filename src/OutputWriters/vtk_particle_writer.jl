@@ -2,7 +2,6 @@ using WriteVTK
 
 using Penning.Utils
 using Penning.Constants
-using Penning.Particles
 using Penning.Setups
 using Penning.Traps
 using Penning.Observables

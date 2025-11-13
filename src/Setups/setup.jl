@@ -1,5 +1,4 @@
 using Penning.Traps
-using Penning.Particles
 using Penning.Circuits
 
 import Penning.Common

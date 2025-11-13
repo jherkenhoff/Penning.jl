@@ -7,16 +7,14 @@ export
     BorisPusher,
     calc_eigenfrequencies,
     calc_electrode_PE,
-    calc_kinetic_energy, 
     calc_omega_c,
     CircuitPinSelection,
     calc_omega_m,
-    calc_omega_p, 
-    calc_omega_z, 
-    calc_potential_energy, 
-    calc_total_energy,
+    calc_omega_p,
+    calc_omega_z,
     calc_trap_PE,
     Callback,
+    Particles,
     EFieldObservable,
     BFieldObservable,
     KineticEnergyObservable,
@@ -40,7 +38,6 @@ export
     ModifiedBorisPusher,
     OrSchedule,
     ParallelPlateElectrode,
-    ParticleCollection,
     PlaneWaveExcitationField,
     PositionMemoryWriter,
     PositionObservable,
@@ -94,7 +91,6 @@ export
 include("Constants.jl")
 include("Common.jl")
 include("Utils/Utils.jl")
-include("Particles/Particles.jl")
 include("Interactions/Interactions.jl")
 include("Electrodes/Electrodes.jl")
 include("Circuits/Circuits.jl")
@@ -104,7 +100,6 @@ include("Setups/Setups.jl")
 include("Selections/Selections.jl")
 include("CircuitConnections/CircuitConnections.jl")
 include("Observables/Observables.jl")
-include("energy.jl")
 include("ParticlePushers/ParticlePushers.jl")
 include("Diagnostics/Diagnostics.jl")
 include("OutputWriters/OutputWriters.jl")
@@ -113,7 +108,6 @@ include("Procedures/Procedures.jl")
 
 using .Utils
 using .Common
-using .Particles
 using .Traps
 using .Circuits
 using .Setups
@@ -128,6 +122,5 @@ using .Diagnostics
 using .OutputWriters
 using .Simulations
 using .Procedures
-
 
 end

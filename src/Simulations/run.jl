@@ -1,6 +1,5 @@
 
 using Penning.ParticlePushers
-using Penning.Particles
 using Penning.Setups
 using Penning.Traps
 using Penning.Fields
@@ -77,21 +76,19 @@ end
 
 function update_trap_fields!(trap::Trap, t::Number)
     # TODO: Refactor and make it less ugly
-    for particle_collection in values(trap.particles)
-        for i in 1:N_particles(particle_collection)
-            if (length(trap.fields) == 0)
-                # If there are no fields, explicitly set the fields to zero
-                particle_collection.E[i] .= 0.0
-                particle_collection.B[i] .= 0.0
-            else
-                for (i_f, field) in enumerate(values(trap.fields))
-                    if i_f == 1
-                        set_E_field!(field, particle_collection.E[i], particle_collection.r[i], t)
-                        set_B_field!(field, particle_collection.B[i], particle_collection.r[i], t)
-                    else
-                        add_E_field!(field, particle_collection.E[i], particle_collection.r[i], t)
-                        add_B_field!(field, particle_collection.B[i], particle_collection.r[i], t)
-                    end
+    for i in eachindex(trap.particles.r)
+        if (length(trap.fields) == 0)
+            # If there are no fields, explicitly set the fields to zero
+            trap.particles.E[i] .= 0.0
+            trap.particles.B[i] .= 0.0
+        else
+            for (i_f, field) in enumerate(values(trap.fields))
+                if i_f == 1
+                    set_E_field!(field, trap.particles.E[i], trap.particles.r[i], t)
+                    set_B_field!(field, trap.particles.B[i], trap.particles.r[i], t)
+                else
+                    add_E_field!(field, trap.particles.E[i], trap.particles.r[i], t)
+                    add_B_field!(field, trap.particles.B[i], trap.particles.r[i], t)
                 end
             end
         end
@@ -138,9 +135,7 @@ function handle_external_circuit!(setup::Setup, dt::Float64)
 
     for trap in values(setup.traps)
         for electrode in trap.electrodes
-            for particle_collection in trap.particles
-                particle_collection.E .+= calc_electrode_backaction_field.( (electrode,), particle_collection.r)
-            end
+            trap.particles.E .+= calc_electrode_backaction_field.( (electrode,), trap.particles.r)
         end
     end
 end

@@ -1,6 +1,5 @@
 using Penning.Setups
 using Penning.Fields
-using Penning.Particles
 using Penning.Traps
 using Penning.Simulations
 using Penning.OutputWriters

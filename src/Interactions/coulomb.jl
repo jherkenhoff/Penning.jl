@@ -1,9 +1,6 @@
 using LinearAlgebra
 
 using Penning.Constants
-using Penning.Particles
-
-#using Polyester
 
 struct CoulombInteraction <: AbstractInteraction
 end

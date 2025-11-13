@@ -5,7 +5,15 @@ using LinearAlgebra
 struct BorisPusher <: AbstractParticlePusher
 end
 
-function initial_particle_push!(pusher::BorisPusher, r::AbstractVector{<:Number}, v::AbstractVector{<:Number}, E::AbstractVector{<:Number}, B::AbstractVector{<:Number}, damping::AbstractVector{<:Number}, q::Number, m::Number, dt::Number)
+function initial_particle_push!(
+    pusher::BorisPusher,
+    v::AbstractVector{<:Number},
+    E::AbstractVector{<:Number},
+    B::AbstractVector{<:Number},
+    q::Number,
+    m::Number,
+    dt::Number
+)
     # Step velocity one step back
     tmp = q / m * B * 0.5 * -dt/2
     s = 2 * tmp / (1 + sum(tmp.^2))
@@ -20,7 +28,15 @@ function initial_particle_push!(pusher::BorisPusher, r::AbstractVector{<:Number}
     push_particle!(pusher, r, v, E, B, damping, q, m, dt)
 end
 
-function push_particle!(pusher::BorisPusher, r::AbstractVector{<:Number}, v::AbstractVector{<:Number}, E::AbstractVector{<:Number}, B::AbstractVector{<:Number}, damping::AbstractVector{<:Number}, q::Number, m::Number, dt::Number)
+function push_particle!(
+    pusher::BorisPusher,
+    v::AbstractVector{<:Number},
+    E::AbstractVector{<:Number},
+    B::AbstractVector{<:Number},
+    q::Number,
+    m::Number,
+    dt::Number
+)
     # Calc velocity
     tmp = q / m * B * 0.5 * dt
     s = 2 * tmp / (1 + sum(tmp.^2))
