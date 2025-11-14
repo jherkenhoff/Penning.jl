@@ -116,10 +116,10 @@ sim = Simulation(
 # compile the code before actually running it. For further information on how Julia
 # executes code, you might want to take a look [here](https://docs.julialang.org/en/v1/devdocs/eval/).
 #
-# The following [`run!`](@ref) command runs the simulation until the time
-# of 10 µs is reached. Note that this is the time **within your simulation** and 
-# not the "real-life time" (also called [wall-time](https://en.wikipedia.org/wiki/Elapsed_real_time)) 
-# that it takes your computer to run.
+# The following [`run!`](@ref) command runs the simulation until a given StopCondition is met. In this simulation, we 
+# tell it to stop when the simulation hits or exceeds 10 µs using a [`SimTimeStopCondition`](@ref). 
+#Note that this is the time **within your simulation** and  not the "real-life time"
+# (also called [wall-time](https://en.wikipedia.org/wiki/Elapsed_real_time)) that it takes your computer to run.
 # Take a look at the documentation of [`run!`](@ref) for further information on stop conditions.
 
 run!(sim, SimTimeStopCondition(10e-6))
@@ -135,6 +135,9 @@ x = getindex.(r, 1)
 y = getindex.(r, 2)
 z = getindex.(r, 3)
 
+
+# ## Plot results
+
 plot(t*1e6, z*1e6, legend=false)
 xlabel!("\$t\$ / ms")
 ylabel!("Axial position / µm")
@@ -146,6 +149,5 @@ xlabel!("\$t\$ / ms")
 ylabel!("X position / µm")
 savefig(joinpath(@__DIR__, "img/basic_eigenmotion_x.png"))
 
-# ## Results
 # ![](img/basic_eigenmotion_z.png)
 # ![](img/basic_eigenmotion_x.png)
