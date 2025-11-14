@@ -20,7 +20,7 @@ function initial_particle_push!(
     v_minus = v + q / m * E * 0.5 * -dt/2
     v_prime = v_minus + cross(v_minus, tmp)
     v_plus = v_minus + cross(v_prime, s)
-    v .= v_plus + q / m * E * 0.5 * -dt/2
+    v[:] = v_plus + q / m * E * 0.5 * -dt/2
 
     # Do not step position
 
@@ -30,6 +30,7 @@ end
 
 function push_particle!(
     pusher::BorisPusher,
+    r::AbstractVector{<:Number},
     v::AbstractVector{<:Number},
     E::AbstractVector{<:Number},
     B::AbstractVector{<:Number},
@@ -43,11 +44,8 @@ function push_particle!(
     v_minus = v + q / m * E * 0.5 * dt
     v_prime = v_minus + cross(v_minus, tmp)
     v_plus = v_minus + cross(v_prime, s)
-    v .= v_plus + q / m * E * 0.5 * dt
-
-    # Add damping:
-    v .+= -damping .* v / m * dt
+    v[:] = v_plus + q / m * E * 0.5 * dt
 
     # Calc new position
-    r .+= v * dt
+    r[:] += v * dt
 end

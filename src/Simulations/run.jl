@@ -35,12 +35,14 @@ function run!(sim::Simulation, stop_condition::AbstractStopCondition)
         should_stop, stop_reason = stop_condition(sim)
         if should_stop
             @info "Simulation stopping: " * stop_reason
-            @info "Simulation took $(prettytime(sim.wall_time_ns/1e9))"
             break
         end
     end
 
     Common.checkpoint!(sim)
+
+    @info "Simulation took $(prettytime(sim.wall_time_ns/1e9))"
+    @info "Stopped at iteration $(sim.setup.clock.iteration) ($(prettytime(sim.setup.clock.time)))"
 
     nothing
 end

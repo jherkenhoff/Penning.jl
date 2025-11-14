@@ -1,4 +1,5 @@
 using Penning.Setups
+using Penning.Traps
 
 struct ParticleSelection{T, PI} <: AbstractParticleSelection
     trap :: T
@@ -36,7 +37,7 @@ end
 function AllParticleSelection(setup::Setup)
     vec = Vector{ParticleSelection}()
     for (trap_index, trap) in pairs(setup.traps)
-        for p_index in keys(trap.particles.r)
+        for p_index in 1:N_particles(trap.particles)
             push!(vec, ParticleSelection(trap_index, p_index))
         end
     end

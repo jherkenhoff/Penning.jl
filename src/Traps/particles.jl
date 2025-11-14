@@ -11,6 +11,9 @@ function Particles(r::AbstractMatrix, v::AbstractMatrix, q::AbstractVector, m::A
     return Particles(r, v, q, m, similar(r), similar(r))
 end
 
+# Just for convenience, there is also a keyword version:
+Particles(;r::AbstractMatrix, v::AbstractMatrix, q::AbstractVector, m::AbstractVector) = Particles(r, v, q, m)
+
 function N_particles(particles::Particles)
     return size(particles.r)[2]
 end
